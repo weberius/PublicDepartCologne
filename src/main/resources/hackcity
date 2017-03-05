@@ -1,0 +1,374 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.6.2
+-- Dumped by pg_dump version 9.6.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: topology; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA topology;
+
+
+ALTER SCHEMA topology OWNER TO postgres;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: postgis; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis IS 'PostGIS geometry, geography, and raster spatial types and functions';
+
+
+--
+-- Name: postgis_topology; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;
+
+
+--
+-- Name: EXTENSION postgis_topology; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION postgis_topology IS 'PostGIS topology spatial types and functions';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: haltestellen; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE haltestellen (
+    gid integer NOT NULL,
+    name character varying(40),
+    knotennumm character varying(20),
+    typ character varying(20),
+    nr_stadtte character varying(3),
+    stadtteil character varying(40),
+    nr_stadtbe character varying(1),
+    stadtbezir character varying(40),
+    hyperlink character varying(200),
+    objectid numeric(10,0),
+    geom geometry(Point)
+);
+
+
+ALTER TABLE haltestellen OWNER TO postgres;
+
+--
+-- Name: haltestellen_gid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE haltestellen_gid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE haltestellen_gid_seq OWNER TO postgres;
+
+--
+-- Name: haltestellen_gid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE haltestellen_gid_seq OWNED BY haltestellen.gid;
+
+
+--
+-- Name: haltestellen gid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY haltestellen ALTER COLUMN gid SET DEFAULT nextval('haltestellen_gid_seq'::regclass);
+
+
+--
+-- Data for Name: haltestellen; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY haltestellen (gid, name, knotennumm, typ, nr_stadtte, stadtteil, nr_stadtbe, stadtbezir, hyperlink, objectid, geom) FROM stdin;
+1	Amsterdamer Str./Gürtel	317	Ubahn	503	Riehl	5	Nippes	http://www.kvb-koeln.de/qr/317/	1	01010000007266F1D25BE01B402E9F33C9447C4940
+2	Slabystr.	315	Ubahn	503	Riehl	5	Nippes	http://www.kvb-koeln.de/qr/315/	2	010100000075575CB0D4F31B40F123FD3DB97B4940
+3	Severinsbrücke	45	Stadtbahn	105	Deutz	1	Innenstadt	http://www.kvb-koeln.de/qr/45/	3	0101000000D75E4F0FD3E31B40C70F98FC18774940
+4	Boltensternstr.	314	Ubahn	503	Riehl	5	Nippes	http://www.kvb-koeln.de/qr/314/	4	01010000007A3128DE7EEC1B4039116830307B4940
+5	Zoo/Flora	313	Ubahn	503	Riehl	5	Nippes	http://www.kvb-koeln.de/qr/313/	5	01010000004A4E673CA2E41B4038DA33DE8B7A4940
+6	Kinderkrankenhaus	316	Stadtbahn	503	Riehl	5	Nippes	http://www.kvb-koeln.de/qr/316/	6	0101000000059EAE81A4DF1B4044DAA77B4B7B4940
+7	Buchforst Waldecker Str.	569	Stadtbahn	902	Buchforst	9	Mülheim	http://www.kvb-koeln.de/qr/569/	7	01010000006B13BCFC1F051C40E8BBA375BA794940
+8	Ollenhauerring	298	Stadtbahn	405	Bocklemünd/Mengenich	4	Ehrenfeld	http://www.kvb-koeln.de/qr/298/	8	01010000000472AF90187C1B40E61E5BE0EA7C4940
+9	Merkenich Mitte	416	Stadtbahn	601	Merkenich	6	Chorweiler	http://www.kvb-koeln.de/qr/416/	9	0101000000927D468CDBCF1B40AC513DC221834940
+10	Merkenich	417	Stadtbahn	601	Merkenich	6	Chorweiler	http://www.kvb-koeln.de/qr/417/	10	01010000007765B41B9CCA1B406288828B9E834940
+11	Rosenhügel	228	Stadtbahn	714	Zündorf	7	Porz	http://www.kvb-koeln.de/qr/228/	11	0101000000BB079FF6763D1C402D9E6EE1E36F4940
+12	Zündorf	486	Stadtbahn	714	Zündorf	7	Porz	http://www.kvb-koeln.de/qr/486/	12	01010000001D3A90BB3C321C4090DA3D40DC6E4940
+13	Mollwitzstr.	336	Stadtbahn	505	Weidenpesch	5	Nippes	http://www.kvb-koeln.de/qr/336/	13	0101000000D7E70F978CCB1B40BB7800AC377D4940
+14	Scheibenstr.	337	Stadtbahn	505	Weidenpesch	5	Nippes	http://www.kvb-koeln.de/qr/337/	14	010100000093794AFEFDC81B4054D270A42B7E4940
+15	Leuchterstr.	608	Stadtbahn	907	Dünnwald	9	Mülheim	http://www.kvb-koeln.de/qr/608/	15	01010000007FBB2A8D8E261C40788F4D888B7F4940
+16	Odenthaler Str.	609	Stadtbahn	907	Dünnwald	9	Mülheim	http://www.kvb-koeln.de/qr/609/	16	01010000008E6A5B666C2B1C40F4FFC7622A804940
+17	Schlebusch	663	Stadtbahn	907	Dünnwald	9	Mülheim	http://www.kvb-koeln.de/qr/663/	17	01010000001BC8E85FA32D1C4008C091446C824940
+18	Ebertplatz	35	Ubahn	104	Neustadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/35/	18	010100000039127690D0D51B4030521A74AE794940
+19	Reichenspergerplatz	34	Ubahn	104	Neustadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/34/	19	010100000009BD605770DB1B40F4E6AEC91D7A4940
+20	Christophstr./Mediapark	32	Ubahn	104	Neustadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/32/	20	01010000004B4DCA2D09C51B4032484A96EC784940
+21	Friesenplatz	30	Ubahn	104	Neustadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/30/	21	0101000000113289E387C21B4051EE60AC63784940
+22	Hansaring (Stadtbahn)	17323	Ubahn	104	Neustadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/17323/	22	01010000005B08112E32CE1B402B1C1D2C6E794940
+23	Hans-Böckler-Platz/Bf West	17322	Ubahn	104	Neustadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/17322/	23	0101000000B8B37AB9A3BB1B40B083DAC1C0784940
+24	Vingst	521	Ubahn	803	Vingst	8	Kalk	http://www.kvb-koeln.de/qr/521/	24	010100000012CA9EA337161C40E561E85765774940
+25	Weiden Schulstr.	241	Stadtbahn	307	Weiden	3	Lindenthal	http://www.kvb-koeln.de/qr/241/	25	010100000033C3CFBF8B501B408FB9A6391D784940
+26	Weiden Zentrum	261	Stadtbahn	307	Weiden	3	Lindenthal	http://www.kvb-koeln.de/qr/261/	26	01010000006BF8D2E711571B4003EE417F18784940
+27	Bahnstr.	830	Stadtbahn	307	Weiden	3	Lindenthal	http://www.kvb-koeln.de/qr/830/	27	01010000006FDB14E97B611B4087529D5414784940
+28	Weiden West (Stadtbahn)	17208	Stadtbahn	307	Weiden	3	Lindenthal	http://www.kvb-koeln.de/qr/17208/	28	01010000003C96D9A678431B403C25B8F960784940
+29	Am Emberg	607	Ubahn	906	Höhenhaus	9	Mülheim	http://www.kvb-koeln.de/qr/607/	29	010100000033911F02551E1C40DEC309B8917E4940
+30	Im Weidenbruch	606	Stadtbahn	906	Höhenhaus	9	Mülheim	http://www.kvb-koeln.de/qr/606/	30	010100000080D8A86312171C409A0BC5D1817D4940
+31	Buchheim Frankfurter Str.	577	Stadtbahn	903	Buchheim	9	Mülheim	http://www.kvb-koeln.de/qr/577/	31	0101000000558DA39A690E1C404E91D3D2017A4940
+32	Buchheim Herler Str.	578	Stadtbahn	903	Buchheim	9	Mülheim	http://www.kvb-koeln.de/qr/578/	32	0101000000246FE7B690191C40A734E84B9C7A4940
+33	Wichheimer Str.	579	Stadtbahn	903	Buchheim	9	Mülheim	http://www.kvb-koeln.de/qr/579/	33	0101000000B2F02BEC07201C408948BAA7127B4940
+34	Escher Str.	326	Ubahn	507	Bilderstöckchen	5	Nippes	http://www.kvb-koeln.de/qr/326/	34	0101000000D31E0A272DBC1B405F9957E6767B4940
+35	Gelderstr./Parkgürtel (Stadtbahn)	17325	Ubahn	507	Bilderstöckchen	5	Nippes	http://www.kvb-koeln.de/qr/17325/	35	010100000093947337F2C21B408BD4B81DF47B4940
+36	Rektor-Klein-Str.	272	Stadtbahn	406	Ossendorf	4	Ehrenfeld	http://www.kvb-koeln.de/qr/272/	36	010100000004D3D7C25A9E1B4023D33C86B27C4940
+37	Margaretastr.	273	Stadtbahn	406	Ossendorf	4	Ehrenfeld	http://www.kvb-koeln.de/qr/273/	37	0101000000F63EA3393A9F1B40F4A09D9AEF7B4940
+38	Alter Flughafen Butzweilerhof	274	Stadtbahn	406	Ossendorf	4	Ehrenfeld	http://www.kvb-koeln.de/qr/274/	38	0101000000DB6B4848D3971B40A4023587207D4940
+39	Sparkasse Am Butzweilerhof	903	Stadtbahn	406	Ossendorf	4	Ehrenfeld	http://www.kvb-koeln.de/qr/903/	39	0101000000A2DFA2BC348D1B40F457D22F177E4940
+40	IKEA Am Butzweilerhof	976	Stadtbahn	406	Ossendorf	4	Ehrenfeld	http://www.kvb-koeln.de/qr/976/	40	01010000008F3AFFC136931B4076B514BDBD7D4940
+41	Porz Steinstr.	466	Stadtbahn	706	Porz	7	Porz	http://www.kvb-koeln.de/qr/466/	41	01010000008B02E46F9C391C401D5D1AA526724940
+42	Porz Markt	467	Stadtbahn	706	Porz	7	Porz	http://www.kvb-koeln.de/qr/467/	42	01010000001A488504953C1C40887EFAAD47714940
+43	Poll Salmstr.	438	Stadtbahn	701	Poll	7	Porz	http://www.kvb-koeln.de/qr/438/	43	01010000003655F140A1F81B40001F35063F754940
+44	Baumschulenweg	439	Stadtbahn	701	Poll	7	Porz	http://www.kvb-koeln.de/qr/439/	44	01010000000BCE9C4DF9FF1B401E1312D91A754940
+45	Raiffeisenstr.	444	Stadtbahn	701	Poll	7	Porz	http://www.kvb-koeln.de/qr/444/	45	01010000002C8FEC579CF11B401B397189C2754940
+46	Rathaus	6	Stadtbahn	103	Altstadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/6/	46	0101000000580BD9AFEDD61B4093615B7A37784940
+47	Weißhausstr.	150	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/150/	47	010100000001028F58EBBB1B402BDF3A04F4754940
+48	Arnulfstr.	151	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/151/	48	010100000021C27D61FEB81B4035BACD2799754940
+49	Sülzburgstr.	152	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/152/	49	010100000061312404C2B51B409ABA60B636754940
+50	Universität	153	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/153/	50	01010000006F41E4F244B91B4062CADBE780764940
+51	Weyertal	154	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/154/	51	010100000013BAED573AB51B406C5971BA46764940
+52	Lindenburg (Universitätskliniken)	155	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/155/	52	0101000000AD09FAD1C9AF1B40A3BF39040C764940
+53	Berrenrather Str./Gürtel	162	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/162/	53	0101000000DBE8DE136DAE1B4025A52F2913754940
+54	Euskirchener Str.	163	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/163/	54	01010000002FF9A4449BAA1B40CB65164A82754940
+55	Zülpicher Str./Gürtel	164	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/164/	55	0101000000BA1F12BC39A91B40D1168274CD754940
+56	Mommsenstr.	165	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/165/	56	0101000000356ACB9D2DA41B40571FBB8AA7754940
+57	Sülz Hermeskeiler Platz	166	Stadtbahn	302	Sülz	3	Lindenthal	http://www.kvb-koeln.de/qr/166/	57	010100000080FD93C310A11B40B3A228BF65754940
+58	Rudolfplatz	27	Ubahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/27/	58	0101000000E72729808EC11B40C9C668DCC4774940
+59	Ubierring	17	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/17/	59	0101000000D12AD3C8A5DC1B402142207E11764940
+60	Chlodwigplatz	18	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/18/	60	010100000068A8B39668D71B4072E2FC39EA754940
+61	Ulrepforte	19	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/19/	61	0101000000FB2E7DF1EACE1B40A2E16ED244764940
+62	Eifelplatz	21	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/21/	62	01010000001D4B1D081FC61B40F1B413122E764940
+63	Eifelstr.	22	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/22/	63	01010000004F5C1EF063C81B40FCFD67889C764940
+64	Barbarossaplatz	23	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/23/	64	01010000004C5F7A0554C51B40796B4811DC764940
+65	Zülpicher Platz	24	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/24/	65	0101000000AF590F0850C31B4026E493A72F774940
+66	Eifelwall	26	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/26/	66	0101000000A1D21CDA82BF1B4074CD847E5F764940
+67	Moltkestr.	28	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/28/	67	0101000000ABC34FBA48BA1B40740637A8BF774940
+68	Moltkestr. (Stadtbahn)	17162	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/17162/	68	010100000094EF2AF186BB1B40C6A81090DE774940
+69	Dasselstr./Bf Süd (Stadtbahn)	17202	Stadtbahn	102	Neustadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/17202/	69	010100000001F512232FBE1B40AA2466F2D0764940
+70	Universitätsstr.	143	Stadtbahn	303	Lindenthal	3	Lindenthal	http://www.kvb-koeln.de/qr/143/	70	0101000000E0180367D5B21B40AC34DA4FE4774940
+71	Melaten	144	Stadtbahn	303	Lindenthal	3	Lindenthal	http://www.kvb-koeln.de/qr/144/	71	0101000000E7C480A0B8AA1B408310CF89E7774940
+72	Wüllnerstr.	169	Stadtbahn	303	Lindenthal	3	Lindenthal	http://www.kvb-koeln.de/qr/169/	72	01010000002A6E33CBC0A11B4074125FAE31774940
+73	Dürener Str./Gürtel	170	Stadtbahn	303	Lindenthal	3	Lindenthal	http://www.kvb-koeln.de/qr/170/	73	01010000008B57FAA2A1A21B40AC3AFF3BC1764940
+74	Brahmsstr.	172	Stadtbahn	303	Lindenthal	3	Lindenthal	http://www.kvb-koeln.de/qr/172/	74	01010000009EE456E9C9971B40DDC7F9A686764940
+75	Gleueler Str./Gürtel	173	Stadtbahn	303	Lindenthal	3	Lindenthal	http://www.kvb-koeln.de/qr/173/	75	01010000006F25723226A61B401BA4ACBF3E764940
+76	Stüttgenhof	234	Stadtbahn	303	Lindenthal	3	Lindenthal	http://www.kvb-koeln.de/qr/234/	76	010100000095FD281DA3811B40AF803990C2754940
+77	Flehbachstr.	546	Stadtbahn	807	Brück	8	Kalk	http://www.kvb-koeln.de/qr/546/	77	0101000000E84B28245E4A1C40A09727994C794940
+78	Brück Mauspfad	547	Stadtbahn	807	Brück	8	Kalk	http://www.kvb-koeln.de/qr/547/	78	01010000009806E0DC21511C402C7C257079794940
+79	Alter Militärring	186	Stadtbahn	305	Müngersdorf	3	Lindenthal	http://www.kvb-koeln.de/qr/186/	79	010100000098720CFDE6861B406CECE9C106784940
+80	Rheinenergie-Stadion	187	Stadtbahn	305	Müngersdorf	3	Lindenthal	http://www.kvb-koeln.de/qr/187/	80	0101000000BC10AD91927F1B401BA3DA8303784940
+81	Junkersdorf	200	Stadtbahn	305	Müngersdorf	3	Lindenthal	http://www.kvb-koeln.de/qr/200/	81	0101000000A00BDA4831791B40A2A72C0A05784940
+82	Steinweg	553	Stadtbahn	808	Rath/Heumar	8	Kalk	http://www.kvb-koeln.de/qr/553/	82	0101000000A04BE96362441C4081B275193A764940
+83	Porzer Str.	554	Stadtbahn	808	Rath/Heumar	8	Kalk	http://www.kvb-koeln.de/qr/554/	83	0101000000DB8CC1FBDE4C1C40163BA5AFF7754940
+84	Röttgensweg	555	Stadtbahn	808	Rath/Heumar	8	Kalk	http://www.kvb-koeln.de/qr/555/	84	01010000002B34342DBA5C1C40FBECF035CB754940
+85	Rath-Heumar	556	Stadtbahn	808	Rath/Heumar	8	Kalk	http://www.kvb-koeln.de/qr/556/	85	01010000000386CC3FE7531C40A2AFB6F4CC754940
+86	Königsforst	557	Stadtbahn	808	Rath/Heumar	8	Kalk	http://www.kvb-koeln.de/qr/557/	86	0101000000938FE87539631C40F163233DBA754940
+87	Holweide Vischeringstr.	583	Stadtbahn	904	Holweide	9	Mülheim	http://www.kvb-koeln.de/qr/583/	87	0101000000E305EA1770281C40562CBED7C97B4940
+88	Maria-Himmelfahrt-Str.	584	Stadtbahn	904	Holweide	9	Mülheim	http://www.kvb-koeln.de/qr/584/	88	01010000003825B47E582E1C405B3F3D23E47B4940
+89	Neufelder Str.	585	Stadtbahn	904	Holweide	9	Mülheim	http://www.kvb-koeln.de/qr/585/	89	01010000000B621194DD381C401879C6401A7C4940
+90	Bayenthalgürtel	76	Stadtbahn	202	Marienburg	2	Rodenkirchen	http://www.kvb-koeln.de/qr/76/	90	0101000000DFD5F7C23BE91B40993CCFBA16744940
+91	Heinrich-Lübke-Ufer	897	Stadtbahn	202	Marienburg	2	Rodenkirchen	http://www.kvb-koeln.de/qr/897/	91	01010000000F80DAD063F01B409E29C13830734940
+92	Sürth Bf	124	Stadtbahn	210	Sürth	2	Rodenkirchen	http://www.kvb-koeln.de/qr/124/	92	0101000000B511609387031C40146B4C0C9B6E4940
+93	Höhenberg Frankfurter Str.	518	Ubahn	804	Höhenberg	8	Kalk	http://www.kvb-koeln.de/qr/518/	93	0101000000788ECE6EE81D1C404AE250CE8B784940
+94	Fuldaer Str.	517	Ubahn	804	Höhenberg	8	Kalk	http://www.kvb-koeln.de/qr/517/	94	0101000000883483FE20171C4082C08BC285784940
+95	Dellbrück Mauspfad	594	Stadtbahn	905	Dellbrück	9	Mülheim	http://www.kvb-koeln.de/qr/594/	95	01010000006AF7166283421C40F62B6046677C4940
+96	Dellbrück Hauptstr.	595	Stadtbahn	905	Dellbrück	9	Mülheim	http://www.kvb-koeln.de/qr/595/	96	0101000000FDE6728BA04C1C40925627B1C67C4940
+97	Thielenbruch	596	Stadtbahn	905	Dellbrück	9	Mülheim	http://www.kvb-koeln.de/qr/596/	97	01010000009D60343B82571C40DF0E6457317D4940
+98	Rodenkirchen Bf	106	Stadtbahn	208	Rodenkirchen	2	Rodenkirchen	http://www.kvb-koeln.de/qr/106/	98	01010000002B862930D0F51B4010C2AB5D09724940
+99	Siegstr. (Stadtbahn)	107	Stadtbahn	208	Rodenkirchen	2	Rodenkirchen	http://www.kvb-koeln.de/qr/107/	99	01010000009B49B02482FA1B402E18AA5B10714940
+100	Michaelshoven	108	Stadtbahn	208	Rodenkirchen	2	Rodenkirchen	http://www.kvb-koeln.de/qr/108/	100	01010000002D82E05CDDFE1B4073A5571C29704940
+101	Heimersdorf	384	Ubahn	604	Heimersdorf	6	Chorweiler	http://www.kvb-koeln.de/qr/384/	101	0101000000B166798AA0A01B403CE3CD1C8C814940
+102	Chorweiler S-Bahn (Bus)	17320	Ubahn	609	Chorweiler	6	Chorweiler	http://www.kvb-koeln.de/qr/17320/	102	010100000037A67788C3971B40072B59EEBB824940
+103	Westhoven Kölner Str.	449	Stadtbahn	702	Westhoven	7	Porz	http://www.kvb-koeln.de/qr/449/	103	01010000004F3DC31E150F1C40E6A9961911744940
+104	Westhoven Berliner Str.	450	Stadtbahn	702	Westhoven	7	Porz	http://www.kvb-koeln.de/qr/450/	104	0101000000649A61C0111A1C40B7EE743B60734940
+105	Meerfeldstr.	355	Stadtbahn	506	Longerich	5	Nippes	http://www.kvb-koeln.de/qr/355/	105	01010000007F532EA1DFAE1B40C829327B5E7F4940
+106	Longericher Str.	356	Stadtbahn	506	Longerich	5	Nippes	http://www.kvb-koeln.de/qr/356/	106	0101000000F0B424D288A81B40C52353E37F7F4940
+107	Longerich Friedhof	357	Stadtbahn	506	Longerich	5	Nippes	http://www.kvb-koeln.de/qr/357/	107	0101000000E6FBFC7E27A51B40D7FD9D786E7F4940
+108	Wilhelm-Sollmann-Str.	362	Stadtbahn	506	Longerich	5	Nippes	http://www.kvb-koeln.de/qr/362/	108	0101000000C502E0A3B2C31B4089E4D751FA7E4940
+109	Altonaer Platz	363	Stadtbahn	506	Longerich	5	Nippes	http://www.kvb-koeln.de/qr/363/	109	0101000000A7B43402C2BB1B4054BE6A45377F4940
+110	Herforder Str.	364	Stadtbahn	506	Longerich	5	Nippes	http://www.kvb-koeln.de/qr/364/	110	0101000000029BCD005DB41B40AAE6C28A4F7F4940
+111	Godorf Bf	134	Stadtbahn	211	Godorf	2	Rodenkirchen	http://www.kvb-koeln.de/qr/134/	111	0101000000C52A2A8B02EA1B4014AF77257B6C4940
+112	Mülheim Wiener Platz	570	Ubahn	901	Mülheim	9	Mülheim	http://www.kvb-koeln.de/qr/570/	112	0101000000A85ED2C44C041C40C5B21DC01C7B4940
+113	Stegerwaldsiedlung	567	Stadtbahn	901	Mülheim	9	Mülheim	http://www.kvb-koeln.de/qr/567/	113	0101000000F923EB80ADF81B401611E89B5F794940
+114	Grünstr.	568	Stadtbahn	901	Mülheim	9	Mülheim	http://www.kvb-koeln.de/qr/568/	114	010100000083F760EC50001C40E5EFF898527A4940
+115	Keupstr.	631	Stadtbahn	901	Mülheim	9	Mülheim	http://www.kvb-koeln.de/qr/631/	115	01010000000AA7C81DE7061C4030F4C999AA7B4940
+116	Von-Sparr-Str.	632	Stadtbahn	901	Mülheim	9	Mülheim	http://www.kvb-koeln.de/qr/632/	116	0101000000E34742CAA90B1C4030BC908E377C4940
+117	Mülheim Berliner Str.	633	Stadtbahn	901	Mülheim	9	Mülheim	http://www.kvb-koeln.de/qr/633/	117	01010000008B05B5E11C0F1C409EC89D2AC57C4940
+118	Bf Mülheim (U)	17315	Ubahn	901	Mülheim	9	Mülheim	http://www.kvb-koeln.de/qr/17315/	118	0101000000B0AD0F28030C1C401BC5ED1A897A4940
+119	Mohnweg	142	Stadtbahn	306	Junkersdorf	3	Lindenthal	http://www.kvb-koeln.de/qr/142/	119	01010000008BD8A8C4E56B1B4013675A400F784940
+120	Marsdorf	235	Stadtbahn	306	Junkersdorf	3	Lindenthal	http://www.kvb-koeln.de/qr/235/	120	0101000000BE17CF7ED16E1B40623F122570754940
+121	Haus Vorst	713	Stadtbahn	306	Junkersdorf	3	Lindenthal	http://www.kvb-koeln.de/qr/713/	121	01010000001F5718D5C7641B40F57248EE34754940
+122	Sülzgürtel	160	Stadtbahn	301	Klettenberg	3	Lindenthal	http://www.kvb-koeln.de/qr/160/	122	01010000002AA2C07D1BB21B405F2F6A4BC8744940
+123	Klettenbergpark	167	Stadtbahn	301	Klettenberg	3	Lindenthal	http://www.kvb-koeln.de/qr/167/	123	0101000000FADFDC4C5FAD1B40E824FB9E35744940
+124	Akazienweg	264	Ubahn	403	Bickendorf	4	Ehrenfeld	http://www.kvb-koeln.de/qr/264/	124	0101000000676AD61925921B400DFDD36B0A7B4940
+125	Äußere Kanalstr.	262	Ubahn	403	Bickendorf	4	Ehrenfeld	http://www.kvb-koeln.de/qr/262/	125	010100000072287713A79B1B40E8CA6F2C817A4940
+126	Kalker Friedhof	539	Stadtbahn	806	Merheim	8	Kalk	http://www.kvb-koeln.de/qr/539/	126	0101000000DBFB5292272B1C40B003C49DA4784940
+127	Merheim	540	Stadtbahn	806	Merheim	8	Kalk	http://www.kvb-koeln.de/qr/540/	127	0101000000108D456340311C4039777F98D7784940
+128	Pohligstr.	52	Stadtbahn	205	Zollstock	2	Rodenkirchen	http://www.kvb-koeln.de/qr/52/	128	01010000008E29EB210BC41B409686D8084F754940
+129	Herthastr.	53	Stadtbahn	205	Zollstock	2	Rodenkirchen	http://www.kvb-koeln.de/qr/53/	129	0101000000229900975FC31B40FCF45426DB744940
+130	Gottesweg	54	Stadtbahn	205	Zollstock	2	Rodenkirchen	http://www.kvb-koeln.de/qr/54/	130	0101000000A50F9F252AC41B40E49C50B386744940
+131	Zollstockgürtel	56	Stadtbahn	205	Zollstock	2	Rodenkirchen	http://www.kvb-koeln.de/qr/56/	131	01010000006C5410A4BAC41B40FF3DF2D4DF734940
+132	Zollstock Südfriedhof	57	Stadtbahn	205	Zollstock	2	Rodenkirchen	http://www.kvb-koeln.de/qr/57/	132	0101000000E0DB6391C7C61B402B6F973452734940
+133	Kalk Kapelle	513	Ubahn	802	Kalk	8	Kalk	http://www.kvb-koeln.de/qr/513/	133	0101000000EA1B2E9CBF081C40D4D48D552F784940
+134	Kalk Post	512	Ubahn	802	Kalk	8	Kalk	http://www.kvb-koeln.de/qr/512/	134	0101000000E8476D4972FE1B401C2735FA00784940
+135	Schaffrathsgasse	242	Stadtbahn	404	Vogelsang	4	Ehrenfeld	http://www.kvb-koeln.de/qr/242/	135	010100000067F2D0D60C7B1B4092F570F85B7C4940
+136	Wolffsohnstr.	282	Stadtbahn	404	Vogelsang	4	Ehrenfeld	http://www.kvb-koeln.de/qr/282/	136	0101000000A0A09B54C4891B400749413D8A7B4940
+137	Westfriedhof	283	Stadtbahn	404	Vogelsang	4	Ehrenfeld	http://www.kvb-koeln.de/qr/283/	137	0101000000ECE44DD38E831B40D24398ACD57B4940
+138	Bocklemünd	291	Stadtbahn	404	Vogelsang	4	Ehrenfeld	http://www.kvb-koeln.de/qr/291/	138	01010000002FCE6F85C37D1B402F33C4A0147C4940
+139	Ostheim	533	Stadtbahn	805	Ostheim	8	Kalk	http://www.kvb-koeln.de/qr/533/	139	01010000004DD83959392A1C404EFFE638F1764940
+140	Autobahn (Stadtbahn)	534	Stadtbahn	805	Ostheim	8	Kalk	http://www.kvb-koeln.de/qr/534/	140	01010000008C2BFC4818371C4095A332D6AB764940
+141	Subbelrather Str./Gürtel	245	Stadtbahn	402	Neuehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/245/	141	0101000000ABE72B4D5AAF1B407279D732337A4940
+142	Nußbaumerstr.	246	Stadtbahn	402	Neuehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/246/	142	01010000005D664157BBB11B4074FB2B7A7F7A4940
+143	Lenauplatz	247	Stadtbahn	402	Neuehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/247/	143	010100000073B74EE05EAC1B4075212C51B27A4940
+144	Iltisstr.	249	Stadtbahn	402	Neuehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/249/	144	010100000062C8AAD6E6A51B40268E1E718C7B4940
+145	Schönhauser Str.	65	Stadtbahn	201	Bayenthal	2	Rodenkirchen	http://www.kvb-koeln.de/qr/65/	145	01010000001AFFBCFF66E31B40EE5A8BFE00754940
+146	Aachener Str./Gürtel	178	Stadtbahn	304	Braunsfeld	3	Lindenthal	http://www.kvb-koeln.de/qr/178/	146	0101000000E04DB18059A21B4036CBB6D1EF774940
+147	Maarweg	179	Stadtbahn	304	Braunsfeld	3	Lindenthal	http://www.kvb-koeln.de/qr/179/	147	01010000004F05B03CF1981B40C6DEFBFAF5774940
+148	Clarenbachstift	180	Stadtbahn	304	Braunsfeld	3	Lindenthal	http://www.kvb-koeln.de/qr/180/	148	010100000089845533C2931B40E6FC6A33FA774940
+149	Eupener Str.	181	Stadtbahn	304	Braunsfeld	3	Lindenthal	http://www.kvb-koeln.de/qr/181/	149	01010000006C0F6F33938E1B40990867B5FE774940
+150	Severinstr.	11	Ubahn	101	Altstadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/11/	150	0101000000375188DED4D31B4098315E9DEC764940
+151	Poststr.	3	Ubahn	101	Altstadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/3/	151	0101000000493D10CCDECC1B40BAE3631133774940
+152	Neumarkt	2	Ubahn	101	Altstadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/2/	152	0101000000FDB08C03AECB1B403AB0FE88C2774940
+153	Mauritiuskirche	4	Stadtbahn	101	Altstadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/4/	153	0101000000BA2E95EDBEC71B40439F088B93774940
+154	Rudolfplatz (Stadtbahn)	17163	Stadtbahn	101	Altstadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/17163/	154	01010000009B6B4B6B2AC21B40C2C4598ED7774940
+155	Rudolfplatz (Stadtbahn)	17192	Stadtbahn	101	Altstadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/17192/	155	01010000007D5476C1ADC21B40FBCC9F74C5774940
+156	Neumarkt (Stadtbahn)	17220	Stadtbahn	101	Altstadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/17220/	156	0101000000F8644D1C6ECA1B409A45B592C7774940
+157	Neumarkt (Stadtbahn)	17222	Stadtbahn	101	Altstadt/Süd	1	Innenstadt	http://www.kvb-koeln.de/qr/17222/	157	0101000000B26EE5E1DBC91B40512E93B0D9774940
+158	Breslauer Platz/Hbf	9	Ubahn	103	Altstadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/9/	158	0101000000DC87F941A7D51B40F65454E4E0784940
+159	Appellhofplatz	7	Ubahn	103	Altstadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/7/	159	0101000000743CFFF73DCD1B401B3F0F4951784940
+160	Appellhofplatz (U)	17199	Ubahn	103	Altstadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/17199/	160	0101000000D2C134321BCD1B40F171239D77784940
+161	Dom/Hbf (U)	17190	Ubahn	103	Altstadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/17190/	161	01010000008E914BACB0D31B406B7E0AFC8B784940
+162	Heumarkt	1	Stadtbahn	103	Altstadt/Nord	1	Innenstadt	http://www.kvb-koeln.de/qr/1/	162	01010000004FF349A607D71B40249EA874C5774940
+163	Leyendeckerstr.	255	Ubahn	401	Ehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/255/	163	0101000000C180DD6FCAA31B400E4F68E82A7A4940
+164	Venloer Str./Gürtel	251	Ubahn	401	Ehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/251/	164	01010000004B7E8A08B7AA1B40EC9C349D9F794940
+165	Körnerstr.	237	Ubahn	401	Ehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/237/	165	01010000008DB54B9E64AE1B405844834D62794940
+166	Piusstr.	236	Ubahn	401	Ehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/236/	166	01010000009F5CBBBD03B41B40F30EF7F116794940
+167	Oskar-Jäger-Str./Gürtel	182	Stadtbahn	401	Ehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/182/	167	0101000000D3D563B1DAA41B40506733744D784940
+168	Gutenbergstr.	238	Stadtbahn	401	Ehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/238/	168	0101000000E77BC82C8DB61B400A9B64C0A5794940
+169	Liebigstr.	239	Stadtbahn	401	Ehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/239/	169	010100000058C78F0A56B21B405725ABDBE5794940
+170	Weinsbergstr./Gürtel	254	Stadtbahn	401	Ehrenfeld	4	Ehrenfeld	http://www.kvb-koeln.de/qr/254/	170	01010000005E9E11F39EA61B40A21FCD36FA784940
+171	Lohsestr.	305	Ubahn	501	Nippes	5	Nippes	http://www.kvb-koeln.de/qr/305/	171	010100000061AEDFCC2ED21B402261A24DA37A4940
+172	Florastr.	304	Ubahn	501	Nippes	5	Nippes	http://www.kvb-koeln.de/qr/304/	172	01010000001440BEB081D01B40F3392AD9867B4940
+173	Neusser Str./Gürtel	303	Ubahn	501	Nippes	5	Nippes	http://www.kvb-koeln.de/qr/303/	173	0101000000903A090C32CE1B4009C2E774757C4940
+174	Niehl	342	Stadtbahn	504	Niehl	5	Nippes	http://www.kvb-koeln.de/qr/342/	174	010100000057BD28719ED21B40906F6895557F4940
+175	Niehl Sebastianstr.	343	Stadtbahn	504	Niehl	5	Nippes	http://www.kvb-koeln.de/qr/343/	175	010100000051853A3E78D81B408F0C9D1B1C7E4940
+176	Geestemünder Str.	367	Stadtbahn	504	Niehl	5	Nippes	http://www.kvb-koeln.de/qr/367/	176	01010000000DCE86C236D21B401FE5BE183E804940
+177	Fordwerke Süd	368	Stadtbahn	504	Niehl	5	Nippes	http://www.kvb-koeln.de/qr/368/	177	0101000000FA527DD84FD21B40F050A7F8BF804940
+178	Fordwerke Mitte	369	Stadtbahn	504	Niehl	5	Nippes	http://www.kvb-koeln.de/qr/369/	178	0101000000FD5CACE259D21B405B50A45085814940
+179	Fordwerke Nord	370	Stadtbahn	504	Niehl	5	Nippes	http://www.kvb-koeln.de/qr/370/	179	0101000000D08BF99959D21B407ED44A4A39824940
+180	Nesselrodestr.	818	Stadtbahn	504	Niehl	5	Nippes	http://www.kvb-koeln.de/qr/818/	180	0101000000FBD908F01FE01B40621B9E710D7D4940
+181	Ensen Gilgaustr.	451	Stadtbahn	703	Ensen	7	Porz	http://www.kvb-koeln.de/qr/451/	181	01010000002A2991F9E41F1C40473BE14324734940
+182	Ensen Kloster	452	Stadtbahn	703	Ensen	7	Porz	http://www.kvb-koeln.de/qr/452/	182	01010000003FC33C9872301C4028D3F6B9D4724940
+183	Deutz-Kalker Bad	44	Ubahn	105	Deutz	1	Innenstadt	http://www.kvb-koeln.de/qr/44/	183	0101000000FDE35BBDCEF11B403EFE62B6DE774940
+184	Deutzer Freiheit	39	Ubahn	105	Deutz	1	Innenstadt	http://www.kvb-koeln.de/qr/39/	184	0101000000B95019E3A7E11B4024006D1BE5774940
+185	Bf Deutz/Messe (U)	17217	Ubahn	105	Deutz	1	Innenstadt	http://www.kvb-koeln.de/qr/17217/	185	0101000000213D54A544E91B4060DC48E049784940
+186	Suevenstr.	40	Stadtbahn	105	Deutz	1	Innenstadt	http://www.kvb-koeln.de/qr/40/	186	010100000047EBE8D21AE81B40F8FB1FBD6E774940
+187	Koelnmesse	42	Stadtbahn	105	Deutz	1	Innenstadt	http://www.kvb-koeln.de/qr/42/	187	0101000000A1C0B74E32ED1B4015B9B981B0784940
+188	Drehbrücke	46	Stadtbahn	105	Deutz	1	Innenstadt	http://www.kvb-koeln.de/qr/46/	188	0101000000C97DAC385CE61B4072814A18D8764940
+189	Poller Kirchweg	47	Stadtbahn	105	Deutz	1	Innenstadt	http://www.kvb-koeln.de/qr/47/	189	0101000000106CC1528BEB1B40CC81A1E13A764940
+190	Bf Deutz / LANXESS arena (Bus)	17392	Stadtbahn	105	Deutz	1	Innenstadt	http://www.kvb-koeln.de/qr/17392/	190	01010000003F498E0DF8E91B40C37DD4F335784940
+\.
+
+
+--
+-- Name: haltestellen_gid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('haltestellen_gid_seq', 190, true);
+
+
+--
+-- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text) FROM stdin;
+\.
+
+
+SET search_path = topology, pg_catalog;
+
+--
+-- Data for Name: topology; Type: TABLE DATA; Schema: topology; Owner: postgres
+--
+
+COPY topology (id, name, srid, "precision", hasz) FROM stdin;
+\.
+
+
+--
+-- Data for Name: layer; Type: TABLE DATA; Schema: topology; Owner: postgres
+--
+
+COPY layer (topology_id, layer_id, schema_name, table_name, feature_column, feature_type, level, child_id) FROM stdin;
+\.
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- Name: haltestellen haltestellen_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY haltestellen
+    ADD CONSTRAINT haltestellen_pkey PRIMARY KEY (gid);
+
+
+--
+-- Name: haltestellen_geom_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX haltestellen_geom_idx ON haltestellen USING gist (geom);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

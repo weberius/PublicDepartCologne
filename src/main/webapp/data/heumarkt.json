@@ -1,0 +1,217 @@
+[
+  {
+    "abfahrt": "Sofort", 
+    "haltestelle": "Zu\u0308ndorf", 
+    "id": "7"
+  }, 
+  {
+    "abfahrt": "2 Min", 
+    "haltestelle": "BreslauerPl/Hbf", 
+    "id": "133"
+  }, 
+  {
+    "abfahrt": "4 Min", 
+    "haltestelle": "Rudolfplatz", 
+    "id": "7"
+  }, 
+  {
+    "abfahrt": "6 Min", 
+    "haltestelle": "Ko\u0308nigsforst", 
+    "id": "9"
+  }, 
+  {
+    "abfahrt": "7 Min", 
+    "haltestelle": "WeidenWest", 
+    "id": "1"
+  }, 
+  {
+    "abfahrt": "8 Min", 
+    "haltestelle": "Su\u0308lz", 
+    "id": "9"
+  }, 
+  {
+    "abfahrt": "10 Min", 
+    "haltestelle": "AmButzweilerhof", 
+    "id": "5"
+  }, 
+  {
+    "abfahrt": "10 Min", 
+    "haltestelle": "Meschenich", 
+    "id": "132"
+  }, 
+  {
+    "abfahrt": "11 Min", 
+    "haltestelle": "Bru\u0308ck", 
+    "id": "1"
+  }, 
+  {
+    "abfahrt": "14 Min", 
+    "haltestelle": "Zu\u0308ndorf", 
+    "id": "7"
+  }, 
+  {
+    "abfahrt": "15 Min", 
+    "haltestelle": "Zollstock", 
+    "id": "133"
+  }, 
+  {
+    "abfahrt": "16 Min", 
+    "haltestelle": "WeidenWest", 
+    "id": "1"
+  }, 
+  {
+    "abfahrt": "17 Min", 
+    "haltestelle": "Ko\u0308nigsforst", 
+    "id": "9"
+  }, 
+  {
+    "abfahrt": "20 Min", 
+    "haltestelle": "Frechen", 
+    "id": "7"
+  }, 
+  {
+    "abfahrt": "20 Min", 
+    "haltestelle": "BreslauerPl/Hbf", 
+    "id": "132"
+  }, 
+  {
+    "abfahrt": "23 Min", 
+    "haltestelle": "Rondorf", 
+    "id": "132"
+  }, 
+  {
+    "abfahrt": "23 Min", 
+    "haltestelle": "Su\u0308lz", 
+    "id": "9"
+  }, 
+  {
+    "abfahrt": "25 Min", 
+    "haltestelle": "AmButzweilerhof", 
+    "id": "5"
+  }, 
+  {
+    "abfahrt": "26 Min", 
+    "haltestelle": "Bensberg", 
+    "id": "1"
+  }, 
+  {
+    "abfahrt": "28 Min", 
+    "haltestelle": "BreslauerPl/Hbf", 
+    "id": "133"
+  }, 
+  {
+    "abfahrt": "29 Min", 
+    "haltestelle": "Zu\u0308ndorf", 
+    "id": "7"
+  }, 
+  {
+    "abfahrt": "30 Min", 
+    "haltestelle": "BreslauerPl/Hbf", 
+    "id": "132"
+  }, 
+  {
+    "abfahrt": "30 Min", 
+    "haltestelle": "WeidenWest", 
+    "id": "1"
+  }, 
+  {
+    "abfahrt": "32 Min", 
+    "haltestelle": "Ko\u0308nigsforst", 
+    "id": "9"
+  }, 
+  {
+    "abfahrt": "34 Min", 
+    "haltestelle": "Rudolfplatz", 
+    "id": "7"
+  }, 
+  {
+    "abfahrt": "38 Min", 
+    "haltestelle": "Su\u0308lz", 
+    "id": "9"
+  }, 
+  {
+    "abfahrt": "40 Min", 
+    "haltestelle": "AmButzweilerhof", 
+    "id": "5"
+  }, 
+  {
+    "abfahrt": "40 Min", 
+    "haltestelle": "Bru\u0308ck", 
+    "id": "1"
+  }, 
+  {
+    "abfahrt": "40 Min", 
+    "haltestelle": "Meschenich", 
+    "id": "132"
+  }, 
+  {
+    "abfahrt": "44 Min", 
+    "haltestelle": "Zu\u0308ndorf", 
+    "id": "7"
+  }, 
+  {
+    "abfahrt": "45 Min", 
+    "haltestelle": "Zollstock", 
+    "id": "133"
+  }, 
+  {
+    "abfahrt": "45 Min", 
+    "haltestelle": "WeidenWest", 
+    "id": "1"
+  }, 
+  {
+    "abfahrt": "45 Min", 
+    "haltestelle": "BreslauerPl/Hbf", 
+    "id": "132"
+  }, 
+  {
+    "abfahrt": "47 Min", 
+    "haltestelle": "Ko\u0308nigsforst", 
+    "id": "9"
+  }, 
+  {
+    "abfahrt": "49 Min", 
+    "haltestelle": "Frechen", 
+    "id": "7"
+  }, 
+  {
+    "abfahrt": "53 Min", 
+    "haltestelle": "Su\u0308lz", 
+    "id": "9"
+  }, 
+  {
+    "abfahrt": "55 Min", 
+    "haltestelle": "AmButzweilerhof", 
+    "id": "5"
+  }, 
+  {
+    "abfahrt": "55 Min", 
+    "haltestelle": "Rondorf", 
+    "id": "132"
+  }, 
+  {
+    "abfahrt": "55 Min", 
+    "haltestelle": "Bensberg", 
+    "id": "1"
+  }, 
+  {
+    "abfahrt": "58 Min", 
+    "haltestelle": "BreslauerPl/Hbf", 
+    "id": "133"
+  }, 
+  {
+    "abfahrt": "59 Min", 
+    "haltestelle": "Zu\u0308ndorf", 
+    "id": "7"
+  }, 
+  {
+    "abfahrt": "60 Min", 
+    "haltestelle": "BreslauerPl/Hbf", 
+    "id": "132"
+  }, 
+  {
+    "abfahrt": "60 Min", 
+    "haltestelle": "WeidenWest", 
+    "id": "1"
+  }
+]

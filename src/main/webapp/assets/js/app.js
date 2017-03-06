@@ -157,7 +157,7 @@ var museums = L.geoJson(null, {
           $("#featureModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
-        var url = "http://192.168.199.142:5000/abfahrt/" + feature.properties.knotennummer + "?limit=10";
+        var url = "https://flask.cologne.codefor.de/abfahrt/" + feature.properties.knotennummer + "?limit=10";
         //var url = "data/heumarkt.json";
         //alert(url);
 
@@ -215,7 +215,7 @@ function onLocationFound(e) {
 //        .bindPopup("You are within " + radius + " meters from this point").openPopup();
     L.circle(e.latlng, radius).addTo(map);
 //    alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
-    var stationurl = "http://192.168.199.142:5000/database?lat=" + e.latlng.lat +"&long=" + e.latlng.lng + "";
+    var stationurl = "https://flask.cologne.codefor.de/database?lat=" + e.latlng.lat +"&long=" + e.latlng.lng + "";
     $.getJSON(stationurl, function (data) {
       museums.addData(data);
     });

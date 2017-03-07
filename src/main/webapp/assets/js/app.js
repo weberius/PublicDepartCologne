@@ -137,19 +137,13 @@ var museums = L.geoJson(null, {
         iconAnchor: [12, 28],
         popupAnchor: [0, -25]
       }),
-      title: feature.properties.name + " zzz",
+      title: feature.properties.name,
       riseOnHover: true
     });
   },
   onEachFeature: function (feature, layer) {
     if (feature.properties) {
-      var content = "<table class='table table-striped table-bordered table-condensed'>" 
-    	+ "<tr><th>Name</th><td>" 
-      	+ feature.properties.name + "&nbsp;&nbsp;&nbsp;&nbsp;"
-      	+ Math.round(feature.properties.distance/100,1) + " min zur Haltestelle"
-      	+ "</td></tr>" 
-      	+ "<tr><th>information</th><td id='information'>information</td></tr>" 
-      	+ "<table>";
+      var content = "<div id='information'>Daten werden geladen ...</div>" ;
       layer.on({
         click: function (e) {
           $("#feature-title").html(feature.properties.name);
@@ -157,26 +151,35 @@ var museums = L.geoJson(null, {
           $("#featureModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
-        var url = "https://flask.cologne.codefor.de/abfahrt/" + feature.properties.knotennummer + "?limit=10";
-        //var url = "data/heumarkt.json";
-        //alert(url);
+        var url = "https://flask.cologne.codefor.de/abfahrt/" + feature.properties.knotennummer + "?limit=20";
 
         $.getJSON(url, function(data) {
           var arr = $.map(data, function(el) { return el });
           
-          var html = '<table><thead></thead><tbody>';
+          var html = "";
+          html += '<h3>';
+          html += Math.round(feature.properties.distance,1) + ' m/ ';
+          html += Math.round(feature.properties.distance/100,1) + ' min zur Haltestelle';
+          html += '</h3>';
+          
+          html += '<table class="table table-striped table-bordered table-condensed"><thead></thead><tbody>';
           html += '<tr>';
           html += '<th>Linie</th>';
           html += '<th>Richtung</th>';
-          html += '<th>Abfahrt</th>';
-          html += '<th>Erreichbar</th>';
+          html += '<th>Abfahrt in</th>';
+          html += '<th>ist erreichbar in</th>';
           html += '</tr>';
           for (var i = 0, len = arr.length; i < len; ++i) {
               html += '<tr>';
               html += '<th>' + arr[i].id + '</th>';
               html += '<td>' + arr[i].haltestelle + '</td>';
-              html += '<td>' + arr[i].abfahrt + '</td>';
-              html += '<td>' + (arr[i].abfahrt - Math.round(feature.properties.distance/100,1)) + '</td>';
+              if (isNaN(arr[i].abfahrt)) {
+            	  html += '<td>' + arr[i].abfahrt + '</td>';
+                  html += '<td>' + (0 - Math.round(feature.properties.distance/100,1)) + ' Min.</td>';
+              } else {
+                  html += '<td>' + arr[i].abfahrt + ' Min.</td>';
+                  html += '<td>' + (arr[i].abfahrt - Math.round(feature.properties.distance/100,1)) + ' Min.</td>';
+              }
               html += "</tr>";
           }
           html += '</tbody><tfoot></tfoot></table>';

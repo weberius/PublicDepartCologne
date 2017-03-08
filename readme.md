@@ -2,15 +2,25 @@
 
 Dieses Projekt soll es Nutzern von Strassenbahnen aufgrund der Geolocation und anhand von Echtzeit Daten zu Abfahrtszeiten ermöglichen, abzuschätzen, ob sie eine bestimmte Strassen noch zu Fuss erreichen können. 
 
+Es handelt sich um eine Webapplikation, die sowohl auf dem Desktop, als auch auf Tablet-Computern und Smartphones mit Hilfe eines Browsers angezeigt verwendet werden kann.
+
+Diese Projekt ist im Rahmen von [Hack Your City 2017](http://www.hackyourcity.de/koeln/) in Köln entstanden.
+
 # Benutzung
 
-Es werden die nächsten 5 Stationen auf einer Karte anzeigt. Durch Tippen auf eine Station wird der Abfahrtsmonitor aufgerufen. Es wird _kein_ Routing zu einem gewünschtem Ziel vorgenommen.
+Es werden die nächsten 5 Stationen auf einer Karte anzeigt. Durch Tippen auf eine Station wird der Abfahrtsmonitor aufgerufen. Neben den Abfahrtszeiten werden anhand der Entfernung der voraussichtliche Fussweg zur Station angezeigt. Es wird _kein_ Routing zu einem gewünschtem Ziel vorgenommen.
 
 # Entwicklungsstand
 
 Diese Anwendung befindet sich in Entwicklung
 
+# Entwicklungspfad
+
+1. Einbinden eines Routing-Systems, um die Genauigkeit des zu erwartenden Fussweges zu verbessern.
+
 # verwendete Technologien
+
+Zentraler Bestandteil ist ein Backend, dass es ermöglicht, die nächsten fünf Stationen anzuzeigen und zur jeweiligen Station die aktuellen Abfahrtszeiten (vgl. [PublicDepartCologne-Backend](https://github.com/codeforcologne/PublicDepartCologne-Backend)).
 
 - html
 - javascript
@@ -21,15 +31,15 @@ Diese Anwendung befindet sich in Entwicklung
 
 ## DB User auf Postgres einrichten
 
-    sudo -u postgres haltestellen -P haltestellen
+    sudo -u postgres haltestellen -P hackcity
     
 ## Datenbank wahlergebnis anlegen
 
-    sudo -u postgres createdb -O haltestellen haltestellen
+    sudo -u postgres createdb -O hackcity hackcity
 
 ## Postgis topology
 
-    sudo -u postgres psql -c "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;" haltestellen
+    sudo -u postgres psql -c "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;" hackcity
     
 ## Tabelle
 
@@ -56,7 +66,7 @@ Diese Anwendung befindet sich in Entwicklung
 
 ## DB-Tabellen initial einrichten
 
-    psql -h localhost -U haltestellen -d haltestellen -a -f src/main/sql/haltestellen.init.sql
+    psql -h localhost -U hackcity -d hackcity -a -f src/main/sql/hackcity.init.sql
 
 # License
 

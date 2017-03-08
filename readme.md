@@ -4,6 +4,8 @@ Dieses Projekt soll es Nutzern von Strassenbahnen aufgrund der Geolocation und a
 
 Es handelt sich um eine Webapplikation, die sowohl auf dem Desktop, als auch auf Tablet-Computern und Smartphones mit Hilfe eines Browsers angezeigt verwendet werden kann.
 
+Grundlage des Projektes sind [Offene Daten der Stadt Köln](https://www.offenedaten-koeln.de/) zu den [Haltestellen Stadtbahn U-Bahn Koeln](https://www.offenedaten-koeln.de/dataset/haltestellen-stadtbahn-u-bahn-koeln) und die [aktuellen Abfahrtszeiten der Strassenbahnen](http://www.kvb-koeln.de/generator/).
+
 Diese Projekt ist im Rahmen von [Hack Your City 2017](http://www.hackyourcity.de/koeln/) in Köln entstanden.
 
 # Benutzung

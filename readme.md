@@ -16,7 +16,8 @@ Diese Anwendung befindet sich in Entwicklung
 
 # Entwicklungspfad
 
-1. Einbinden eines Routing-Systems, um die Genauigkeit des zu erwartenden Fussweges zu verbessern.
+- Einbinden eines Routing-Systems, um die Genauigkeit des zu erwartenden Fussweges zu verbessern.
+- Weiterentwicklung der Oberfläche
 
 # verwendete Technologien
 
@@ -26,6 +27,7 @@ Zentraler Bestandteil ist ein Backend, dass es ermöglicht, die nächsten fünf 
 - javascript
 - Python
 - PostGres/ Python
+- REST (json/ geojson)
 
 # Datenbank
 

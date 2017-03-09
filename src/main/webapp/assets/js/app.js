@@ -89,7 +89,7 @@ function syncSidebar() {
   museums.eachLayer(function (layer) {
     if (map.hasLayer(museumLayer)) {
       if (map.getBounds().contains(layer.getLatLng())) {
-        $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/museum.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+        $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="16" src="assets/img/' + layer.feature.properties.typ + '.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
       }
     }
   });
@@ -132,7 +132,7 @@ var museums = L.geoJson(null, {
   pointToLayer: function (feature, latlng) {
     return L.marker(latlng, {
       icon: L.icon({
-        iconUrl: "assets/img/museum.png",
+        iconUrl: "assets/img/" + feature.properties.typ + ".png",
         iconSize: [20, 20],
         iconAnchor: [12, 28],
         popupAnchor: [0, -25]
@@ -189,7 +189,7 @@ var museums = L.geoJson(null, {
 
         }
       });
-      $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/museum.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+      $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/' + layer.feature.properties.typ + '.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
       museumSearch.push({
         name: layer.feature.properties.name,
         address: layer.feature.properties.ADRESS1,
@@ -322,8 +322,8 @@ var baseLayers = {
 };
 
 var groupedOverlays = {
-  "U-Bahn Stationen": {
-    "<img src='assets/img/museum.png' width='20' height='20'>&nbsp;Stationen": museumLayer
+  "Haltestellen": {
+    "<img src='assets/img/Stadtbahn.png' width='20' height='20'>&nbsp;Stationen": museumLayer
   }
 };
 
@@ -378,7 +378,7 @@ $(document).one("ajaxStop", function () {
     displayKey: "name",
     source: museumsBH.ttAdapter(),
     templates: {
-      header: "<h4 class='typeahead-header'><img src='assets/img/museum.png' width='24' height='28'>&nbsp;Museums</h4>",
+      header: "<h4 class='typeahead-header'><img src='assets/img/Stadtbahn.png' width='32' height='32'>&nbsp;Museums</h4>",
       suggestion: Handlebars.compile(["{{name}}<br>&nbsp;<small>{{address}}</small>"].join(""))
     }
   }).on("typeahead:selected", function (obj, datum) {

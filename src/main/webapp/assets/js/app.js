@@ -347,7 +347,7 @@ $(document).one("ajaxStop", function () {
     displayKey: "name",
     source: museumsBH.ttAdapter(),
     templates: {
-      header: "<h4 class='typeahead-header'><img src='assets/img/Stadtbahn.png' width='32' height='32'>&nbsp;Museums</h4>",
+      header: "<h4 class='typeahead-header'><img src='assets/img/Stadtbahn.png' width='32' height='32'>&nbsp;Haltestellen</h4>",
       suggestion: Handlebars.compile(["{{name}}<br>&nbsp;<small>{{address}}</small>"].join(""))
     }
   }).on("typeahead:selected", function (obj, datum) {

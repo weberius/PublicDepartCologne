@@ -29,8 +29,8 @@ $("#legend-btn").click(function() {
   return false;
 });
 
-$("#login-btn").click(function() {
-  $("#loginModal").modal("show");
+$("#full-extent-btn").click(function() {
+  map.fitBounds(museums.getBounds());
   $(".navbar-collapse.in").collapse("hide");
   return false;
 });
@@ -105,7 +105,10 @@ function syncSidebar() {
 /* Basemap Layers */
 var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
   maxZoom: 19,
-  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://cartodb.com/attributions">CartoDB</a>'
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, '
+	  + '&copy; <a href="https://cartodb.com/attributions">CartoDB</a>, '
+	  + '<a href="https://www.offenedaten-koeln.de">Offene Daten Köln</a>, '
+	  + '<a href="https://github.com/bmcbride/bootleaf">bryanmcbride.com</a>'
 });
 
 /* Overlay Layers */
@@ -270,7 +273,7 @@ var attributionControl = L.control({
 });
 attributionControl.onAdd = function (map) {
   var div = L.DomUtil.create("div", "leaflet-control-attribution");
-  div.innerHTML = "<span class='hidden-xs'>Developed by <a href='http://bryanmcbride.com'>bryanmcbride.com</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Attribution</a>";
+  div.innerHTML = "<span class='hidden-xs'>Developed by <a href='https://github.com/codeforcologne'>Code for Cologne</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Attribution</a>";
   return div;
 };
 map.addControl(attributionControl);

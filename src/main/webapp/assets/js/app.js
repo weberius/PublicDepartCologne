@@ -213,17 +213,14 @@ map = L.map("map", {
   attributionControl: false
 });
 
-function onLocationError(e) {
-    var stationurl = "https://flask.cologne.codefor.de/database?lat=50.94135&long=6.95819";
-    $.getJSON(stationurl, function (data) {
-      museums.addData(data);
-      map.addLayer(museumLayer);
-    });
-}
+map.locate({setView: true, maxZoom: 15});
 
 function onLocationFound(e) {
     var radius = e.accuracy / 2;
+//    L.marker(e.latlng).addTo(map)
+//        .bindPopup("You are within " + radius + " meters from this point").openPopup();
     L.circle(e.latlng, radius).addTo(map);
+//    alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
     var stationurl = "https://flask.cologne.codefor.de/database?lat=" + e.latlng.lat +"&long=" + e.latlng.lng + "";
     $.getJSON(stationurl, function (data) {
       museums.addData(data);
@@ -231,14 +228,6 @@ function onLocationFound(e) {
     });
 }
 
-map.locate({
-	setView: false, 
-	maxZoom: 15,
-	timeout: 1000,
-	maximumAge: 1000
-});
-
-map.on('locationerror', onLocationError);
 map.on('locationfound', onLocationFound);
 
 /* Layer control listeners that allow for a single markerClusters layer */

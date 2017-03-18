@@ -215,22 +215,28 @@ map = L.map("map", {
 
 map.locate({setView: true, maxZoom: 15});
 
+function onLocationError(e) {
+    var radius = e.accuracy / 2;
+    L.circle(e.latlng, radius).addTo(map);
+    var stationurl = "https://flask.cologne.codefor.de/database?lat=50.94135&long=6.95819";
+    $.getJSON(stationurl, function (data) {
+      museums.addData(data);
+      map.addLayer(museumLayer);
+    });
+}
+
 function onLocationFound(e) {
     var radius = e.accuracy / 2;
-//    L.marker(e.latlng).addTo(map)
-//        .bindPopup("You are within " + radius + " meters from this point").openPopup();
     L.circle(e.latlng, radius).addTo(map);
-//    alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
     var stationurl = "https://flask.cologne.codefor.de/database?lat=" + e.latlng.lat +"&long=" + e.latlng.lng + "";
     $.getJSON(stationurl, function (data) {
       museums.addData(data);
       map.addLayer(museumLayer);
     });
-
 }
 
 map.on('locationfound', onLocationFound);
-//var stationurl = "data/stations.geojson";
+map.on('locationerror', onLocationError);
 
 /* Layer control listeners that allow for a single markerClusters layer */
 map.on("overlayadd", function(e) {

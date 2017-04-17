@@ -154,7 +154,7 @@ var museums = L.geoJson(null, {
           $("#featureModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
-        var url = "https://flask.cologne.codefor.de/abfahrt/" + feature.id + "?limit=20";
+        var url = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/stop/" + feature.id;
 
         $.getJSON(url, function(data) {
           var arr = $.map(data, function(el) { return el });
@@ -174,14 +174,14 @@ var museums = L.geoJson(null, {
           html += '</tr>';
           for (var i = 0, len = arr.length; i < len; ++i) {
               html += '<tr>';
-              html += '<th>' + arr[i].id + '</th>';
-              html += '<td>' + arr[i].haltestelle + '</td>';
-              if (isNaN(arr[i].abfahrt)) {
-            	  html += '<td>' + arr[i].abfahrt + '</td>';
+              html += '<th>' + arr[i].route + '</th>';
+              html += '<td>' + arr[i].destination + '</td>';
+              if (isNaN(arr[i].time)) {
+            	  html += '<td>' + arr[i].time + '</td>';
                   html += '<td>' + (0 - Math.round(feature.properties.distance/100,1)) + ' Min.</td>';
               } else {
-                  html += '<td>' + arr[i].abfahrt + ' Min.</td>';
-                  html += '<td>' + (arr[i].abfahrt - Math.round(feature.properties.distance/100,1)) + ' Min.</td>';
+                  html += '<td>' + arr[i].time + ' Min.</td>';
+                  html += '<td>' + (arr[i].time - Math.round(feature.properties.distance/100,1)) + ' Min.</td>';
               }
               html += "</tr>";
           }

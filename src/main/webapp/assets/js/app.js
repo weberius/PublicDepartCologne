@@ -154,7 +154,7 @@ var museums = L.geoJson(null, {
           $("#featureModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
-        var url = "https://flask.cologne.codefor.de/abfahrt/" + feature.properties.knotennummer + "?limit=20";
+        var url = "https://flask.cologne.codefor.de/abfahrt/" + feature.id + "?limit=20";
 
         $.getJSON(url, function(data) {
           var arr = $.map(data, function(el) { return el });
@@ -221,7 +221,7 @@ function onLocationFound(e) {
 //        .bindPopup("You are within " + radius + " meters from this point").openPopup();
     L.circle(e.latlng, radius).addTo(map);
 //    alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
-    var stationurl = "https://flask.cologne.codefor.de/database?lat=" + e.latlng.lat +"&long=" + e.latlng.lng + "";
+    var stationurl = "https://tom.cologne.codefor.de/publicTransportStation/service/stops?latlng=" + e.latlng.lat +"," + e.latlng.lng + "&geojson";
     $.getJSON(stationurl, function (data) {
       museums.addData(data);
       map.addLayer(museumLayer);

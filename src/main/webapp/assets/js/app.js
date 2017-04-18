@@ -1,4 +1,6 @@
 var map, featureList, museumSearch = [];
+var locationLat, locationLng;
+
 
 $(window).resize(function() {
   sizeLayerControl();
@@ -154,42 +156,37 @@ var museums = L.geoJson(null, {
           $("#featureModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
-        var url = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/stop/" + feature.id;
-
-        $.getJSON(url, function(data) {
-          var arr = $.map(data, function(el) { return el });
-          
-          var html = "";
-          html += '<h3>';
-          html += Math.round(feature.properties.distance,1) + ' m/ ';
-          html += Math.round(feature.properties.distance/100,1) + ' min zur Haltestelle';
-          html += '</h3>';
-          
-          html += '<table class="table table-striped table-bordered table-condensed"><thead></thead><tbody>';
-          html += '<tr>';
-          html += '<th>Linie</th>';
-          html += '<th>Richtung</th>';
-          html += '<th>Abfahrt in</th>';
-          html += '<th>ist erreichbar in</th>';
-          html += '</tr>';
-          for (var i = 0, len = arr.length; i < len; ++i) {
-              html += '<tr>';
-              html += '<th>' + arr[i].route + '</th>';
-              html += '<td>' + arr[i].destination + '</td>';
-              if (isNaN(arr[i].time)) {
-            	  html += '<td>' + arr[i].time + '</td>';
-                  html += '<td>' + (0 - Math.round(feature.properties.distance/100,1)) + ' Min.</td>';
-              } else {
-                  html += '<td>' + arr[i].time + ' Min.</td>';
-                  html += '<td>' + (arr[i].time - Math.round(feature.properties.distance/100,1)) + ' Min.</td>';
-              }
-              html += "</tr>";
-          }
-          html += '</tbody><tfoot></tfoot></table>';
-          
-          $("#information").html(html);
-        });
-
+          var routingUrl = "https://tom.cologne.codefor.de/feetandbikerouting/service/foot?fromTo=" + locationLat + "," + locationLng + ","+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0];
+          $.getJSON(routingUrl, function(dat) {
+        	  console.log(dat);
+              var url = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/stop/" + feature.id;
+              $.getJSON(url, function(data) {
+    	          var arr = $.map(data, function(el) { return el });
+    	          
+    	          var html = "";
+    	          html += '<h3>';
+    	          html += dat.distanceInMeter + " m oder ca. " + dat.timeInMinutes + " Min. zu Fu&szlig; zur Haltestelle.";
+    	          html += '</h3>';
+    	          html += '<table class="table table-striped table-bordered table-condensed"><thead></thead><tbody>';
+    	          html += '<tr>';
+    	          html += '<th>Linie</th>';
+    	          html += '<th>Richtung</th>';
+    	          html += '<th>Abfahrt in</th>';
+    	          html += '<th>ist erreichbar in</th>';
+    	          html += '</tr>';
+    	          for (var i = 0, len = arr.length; i < len; ++i) {
+    	              html += '<tr>';
+    	              html += '<th>' + arr[i].route + '</th>';
+    	              html += '<td>' + arr[i].destination + '</td>';
+	                  html += '<td>' + arr[i].time + ' Min.</td>';
+	                  html += '<td>' + (arr[i].time - dat.timeInMinutes) + ' Min.</td>';
+    	              html += "</tr>";
+    	          }
+    	          html += '</tbody><tfoot></tfoot></table>';
+    	          
+    	          $("#information").html(html);
+              });
+          });
         }
       });
       $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/' + layer.feature.properties.typ + '.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
@@ -216,11 +213,12 @@ map = L.map("map", {
 map.locate({setView: true, maxZoom: 15});
 
 function onLocationFound(e) {
+	locationLat = e.latlng.lat;
+	locationLng = e.latlng.lng;
+
     var radius = e.accuracy / 2;
-//    L.marker(e.latlng).addTo(map)
-//        .bindPopup("You are within " + radius + " meters from this point").openPopup();
     L.circle(e.latlng, radius).addTo(map);
-//    alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
+  
     var stationurl = "https://tom.cologne.codefor.de/publicTransportStation/service/stops?latlng=" + e.latlng.lat +"," + e.latlng.lng + "&geojson";
     $.getJSON(stationurl, function (data) {
       museums.addData(data);

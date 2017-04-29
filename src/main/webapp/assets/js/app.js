@@ -205,7 +205,8 @@ var museums = L.geoJson(null, {
 });
 
 map = L.map("map", {
-  zoom: 10,
+  zoom: 15,
+  minZoom: 14,
   center: [50.94135, 6.95819],
   layers: [cartoLight, museums, markerClusters, highlight],
   zoomControl: false,
@@ -247,6 +248,25 @@ map.on("overlayremove", function(e) {
 
 /* Filter sidebar feature list to only show features in current map bounds */
 map.on("moveend", function (e) {
+    // remove layers from markerCluster
+	markerClusters.eachLayer(function(layer){
+		markerClusters.removeLayer(layer);
+	});
+	// read values from map
+	var north = map.getBounds().getNorth();
+	var west = map.getBounds().getWest();
+	var south = map.getBounds().getSouth();
+	var east = map.getBounds().getEast();
+	// new stationurl
+    var stationurl = "https://tom.cologne.codefor.de/publicTransportStation/service/stops?bbox=" + north +"," + west + "," + south +"," + east + "&geojson";
+    $.getJSON(stationurl, function (data) {
+      // clear layers
+      museums.clearLayers(); 
+      // add data
+      museums.addData(data);
+      markerClusters.addLayer(museums);
+    });
+
   syncSidebar();
 });
 

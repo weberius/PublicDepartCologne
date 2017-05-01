@@ -1,4 +1,4 @@
-var map, featureList, museumSearch = [];
+var map, featureList, stopSearch = [];
 var locationLat, locationLng;
 
 
@@ -32,7 +32,7 @@ $("#legend-btn").click(function() {
 });
 
 $("#full-extent-btn").click(function() {
-  map.fitBounds(museums.getBounds());
+  map.fitBounds(stops.getBounds());
   $(".navbar-collapse.in").collapse("hide");
   return false;
 });
@@ -87,9 +87,9 @@ function sidebarClick(id) {
 function syncSidebar() {
   /* Empty sidebar features */
   $("#feature-list tbody").empty();
-  /* Loop through museums layer and add only features which are in the map bounds */
-  museums.eachLayer(function (layer) {
-    if (map.hasLayer(museumLayer)) {
+  /* Loop through stops layer and add only features which are in the map bounds */
+  stops.eachLayer(function (layer) {
+    if (map.hasLayer(stopLayer)) {
       if (map.getBounds().contains(layer.getLatLng())) {
         $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="16" src="assets/img/' + layer.feature.properties.typ + '.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
       }
@@ -131,9 +131,9 @@ var markerClusters = new L.MarkerClusterGroup({
 });
 
 
-/* Empty layer placeholder to add to layer control for listening when to add/remove museums to markerClusters layer */
-var museumLayer = L.geoJson(null);
-var museums = L.geoJson(null, {
+/* Empty layer placeholder to add to layer control for listening when to add/remove stops to markerClusters layer */
+var stopLayer = L.geoJson(null);
+var stops = L.geoJson(null, {
   pointToLayer: function (feature, latlng) {
     return L.marker(latlng, {
       icon: L.icon({
@@ -192,10 +192,10 @@ var museums = L.geoJson(null, {
         }
       });
       $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/' + layer.feature.properties.typ + '.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-      museumSearch.push({
+      stopSearch.push({
         name: layer.feature.properties.name,
         address: layer.feature.properties.ADRESS1,
-        source: "Museums",
+        source: "Stops",
         id: L.stamp(layer),
         lat: layer.feature.geometry.coordinates[1],
         lng: layer.feature.geometry.coordinates[0]
@@ -208,7 +208,7 @@ map = L.map("map", {
   zoom: 15,
   minZoom: 14,
   center: [50.94135, 6.95819],
-  layers: [cartoLight, museums, markerClusters, highlight],
+  layers: [cartoLight, stops, markerClusters, highlight],
   zoomControl: false,
   attributionControl: false
 });
@@ -224,8 +224,8 @@ function onLocationFound(e) {
   
     var stationurl = "https://tom.cologne.codefor.de/publicTransportStation/service/stops?latlng=" + e.latlng.lat +"," + e.latlng.lng + "&geojson";
     $.getJSON(stationurl, function (data) {
-      museums.addData(data);
-      map.addLayer(museumLayer);
+      stops.addData(data);
+      map.addLayer(stopLayer);
     });
 }
 
@@ -233,15 +233,15 @@ map.on('locationfound', onLocationFound);
 
 /* Layer control listeners that allow for a single markerClusters layer */
 map.on("overlayadd", function(e) {
-  if (e.layer === museumLayer) {
-    markerClusters.addLayer(museums);
+  if (e.layer === stopLayer) {
+    markerClusters.addLayer(stops);
     syncSidebar();
   }
 });
 
 map.on("overlayremove", function(e) {
-  if (e.layer === museumLayer) {
-    markerClusters.removeLayer(museums);
+  if (e.layer === stopLayer) {
+    markerClusters.removeLayer(stops);
     syncSidebar();
   }
 });
@@ -261,10 +261,10 @@ map.on("moveend", function (e) {
     var stationurl = "https://tom.cologne.codefor.de/publicTransportStation/service/stops?bbox=" + north +"," + west + "," + south +"," + east + "&geojson";
     $.getJSON(stationurl, function (data) {
       // clear layers
-      museums.clearLayers(); 
+      stops.clearLayers(); 
       // add data
-      museums.addData(data);
-      markerClusters.addLayer(museums);
+      stops.addData(data);
+      markerClusters.addLayer(stops);
     });
 
   syncSidebar();
@@ -313,7 +313,7 @@ var baseLayers = {
 
 var groupedOverlays = {
   "Haltestellen": {
-    "<img src='assets/img/Stadtbahn.png' width='20' height='20'>&nbsp;Stationen": museumLayer
+    "<img src='assets/img/Stadtbahn.png' width='20' height='20'>&nbsp;Stationen": stopLayer
   }
 };
 
@@ -342,21 +342,21 @@ $(document).one("ajaxStop", function () {
   $("#loading").hide();
   sizeLayerControl();
   /* Fit map to boroughs bounds */
-  map.fitBounds(museums.getBounds());
+  map.fitBounds(stops.getBounds());
   featureList = new List("features", {valueNames: ["feature-name"]});
   featureList.sort("feature-name", {order:"asc"});
 
-  var museumsBH = new Bloodhound({
-    name: "Museums",
+  var stopsBH = new Bloodhound({
+    name: "Stops",
     datumTokenizer: function (d) {
       return Bloodhound.tokenizers.whitespace(d.name);
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    local: museumSearch,
+    local: stopSearch,
     limit: 10
   });
 
-  museumsBH.initialize();
+  stopsBH.initialize();
 
   /* instantiate the typeahead UI */
   $("#searchbox").typeahead({
@@ -364,17 +364,17 @@ $(document).one("ajaxStop", function () {
     highlight: true,
     hint: false
   }, {
-    name: "Museums",
+    name: "Stops",
     displayKey: "name",
-    source: museumsBH.ttAdapter(),
+    source: stopsBH.ttAdapter(),
     templates: {
       header: "<h4 class='typeahead-header'><img src='assets/img/Stadtbahn.png' width='32' height='32'>&nbsp;Haltestellen</h4>",
       suggestion: Handlebars.compile(["{{name}}<br>&nbsp;<small>{{address}}</small>"].join(""))
     }
   }).on("typeahead:selected", function (obj, datum) {
-    if (datum.source === "Museums") {
-      if (!map.hasLayer(museumLayer)) {
-        map.addLayer(museumLayer);
+    if (datum.source === "Stops") {
+      if (!map.hasLayer(stopLayer)) {
+        map.addLayer(stopLayer);
       }
       map.setView([datum.lat, datum.lng], 17);
       if (map._layers[datum.id]) {

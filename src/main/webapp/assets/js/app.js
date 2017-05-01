@@ -204,11 +204,53 @@ var stops = L.geoJson(null, {
   }
 });
 
+var bikesLayer = L.geoJson(null);
+var bikes = L.geoJson(null, {
+  pointToLayer: function (feature, latlng) {
+    return L.marker(latlng, {
+      icon: L.icon({
+        iconUrl: "assets/img/Fahrrad.png",
+        iconSize: [20, 20],
+        iconAnchor: [12, 28],
+        popupAnchor: [0, -25]
+      }),
+      title: feature.properties.name,
+      riseOnHover: true
+    });
+  },
+  onEachFeature: function (feature, layer) {
+    if (feature.properties) {
+      var content = "<div id='information'>Daten werden geladen ...</div>" ;
+      layer.on({
+        click: function (e) {
+          $("#feature-title").html(feature.properties.name);
+          $("#feature-info").html(content);
+          $("#featureModal").modal("show");
+          highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
+
+          var routingUrl = "/kvbradlive/service/bike/" + feature.properties.number;
+          $.getJSON(routingUrl, function(data) {
+        	  console.log(data);
+
+	          var html = "";
+	          html += '<h3>';
+	          html += "TODO m oder ca. TODO Min. zu Fu&szlig; zum Fahrrad.";
+	          html += '</h3>';
+
+	          $("#information").html(html);
+          });
+        }
+      });
+      $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/Fahrrad.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+    }
+  }
+});
+
 map = L.map("map", {
   zoom: 15,
   minZoom: 14,
   center: [50.94135, 6.95819],
-  layers: [cartoLight, stops, markerClusters, highlight],
+  layers: [cartoLight, stops, bikes, markerClusters, highlight],
   zoomControl: false,
   attributionControl: false
 });
@@ -226,6 +268,12 @@ function onLocationFound(e) {
     $.getJSON(stationurl, function (data) {
       stops.addData(data);
       map.addLayer(stopLayer);
+    });
+    
+    var bikesurl = "/kvbradpositions/service/allbikeslatestposition?geojson";
+    $.getJSON(bikesurl, function (data) {
+        bikes.addData(data);
+        map.addLayer(bikesLayer);
     });
 }
 
@@ -314,6 +362,9 @@ var baseLayers = {
 var groupedOverlays = {
   "Haltestellen": {
     "<img src='assets/img/Stadtbahn.png' width='20' height='20'>&nbsp;Stationen": stopLayer
+  },
+  "Fahrräder": {
+	"<img src='assets/img/Fahrrad.png' width='20' height='20'>&nbsp;Fahrräder": bikesLayer
   }
 };
 

@@ -258,7 +258,7 @@ map = L.map("map", {
   attributionControl: false
 });
 
-map.locate({setView: true, watch: true, maxZoom: 15});
+map.locate({setView: true, maxZoom: 15});
 
 function onLocationFound(e) {
 	locationLat = e.latlng.lat;
@@ -303,7 +303,7 @@ map.on("moveend", function (e) {
 	var west = map.getBounds().getWest();
 	var south = map.getBounds().getSouth();
 	var east = map.getBounds().getEast();
-	// new stationurl
+	// for stops
     var stationurl = "https://tom.cologne.codefor.de/publicTransportStation/service/stops?bbox=" + north +"," + west + "," + south +"," + east + "&geojson";
     $.getJSON(stationurl, function (data) {
       // clear layers
@@ -312,9 +312,12 @@ map.on("moveend", function (e) {
       stops.addData(data);
       markerClusters.addLayer(stops);
     });
-    
+    // for bikes
     var bikesurl = "/kvbradpositions/service/allbikeslatestposition?bbox=" + north +"," + west + "," + south +"," + east + "&geojson";
     $.getJSON(bikesurl, function (data) {
+        // clear layers
+    	bikes.clearLayers();
+        // add data
         bikes.addData(data);
         map.addLayer(bikesLayer);
     });

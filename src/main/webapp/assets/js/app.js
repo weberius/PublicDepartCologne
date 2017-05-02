@@ -236,6 +236,9 @@ var bikes = L.geoJson(null, {
 	          html += '<h3>';
 	          html += data.distanceToDestination + " m oder ca. " + data.timeToDestination + " Min. zu Fu&szlig; zum Fahrrad.";
 	          html += '</h3>';
+	          html += '<p>';
+	          html += 'Bitte beachten Sie: das Rad kann, wenn Sie den Punkt erreichen, bereits ausgeliehen sein.';
+	          html += '</p>';
 
 	          $("#information").html(html);
           });
@@ -255,7 +258,7 @@ map = L.map("map", {
   attributionControl: false
 });
 
-map.locate({setView: true, maxZoom: 15});
+map.locate({setView: true, watch: true, maxZoom: 15});
 
 function onLocationFound(e) {
 	locationLat = e.latlng.lat;
@@ -270,11 +273,6 @@ function onLocationFound(e) {
       map.addLayer(stopLayer);
     });
     
-    var bikesurl = "/kvbradpositions/service/allbikeslatestposition?geojson";
-    $.getJSON(bikesurl, function (data) {
-        bikes.addData(data);
-        map.addLayer(bikesLayer);
-    });
 }
 
 map.on('locationfound', onLocationFound);
@@ -314,6 +312,13 @@ map.on("moveend", function (e) {
       stops.addData(data);
       markerClusters.addLayer(stops);
     });
+    
+    var bikesurl = "/kvbradpositions/service/allbikeslatestposition?bbox=" + north +"," + west + "," + south +"," + east + "&geojson";
+    $.getJSON(bikesurl, function (data) {
+        bikes.addData(data);
+        map.addLayer(bikesLayer);
+    });
+
 
   syncSidebar();
 });

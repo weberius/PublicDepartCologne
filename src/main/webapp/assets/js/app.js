@@ -228,13 +228,13 @@ var bikes = L.geoJson(null, {
           $("#featureModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
-          var routingUrl = "/kvbradlive/service/bike/" + feature.properties.number;
+          var routingUrl = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/bike/" + feature.properties.number + "?fromTo=" + locationLat + "," + locationLng + ","+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0];
           $.getJSON(routingUrl, function(data) {
         	  console.log(data);
 
 	          var html = "";
 	          html += '<h3>';
-	          html += "TODO m oder ca. TODO Min. zu Fu&szlig; zum Fahrrad.";
+	          html += data.distanceToDestination + " m oder ca. " + data.timeToDestination + " Min. zu Fu&szlig; zum Fahrrad.";
 	          html += '</h3>';
 
 	          $("#information").html(html);

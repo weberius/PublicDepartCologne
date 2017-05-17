@@ -253,7 +253,7 @@ map = L.map("map", {
   zoom: 15,
   minZoom: 14,
   center: [50.94135, 6.95819],
-  layers: [cartoLight, stops, bikes, markerClusters, highlight],
+  layers: [cartoLight, markerClusters, highlight],
   zoomControl: false,
   attributionControl: false
 });
@@ -283,12 +283,18 @@ map.on("overlayadd", function(e) {
     markerClusters.addLayer(stops);
     syncSidebar();
   }
+  if (e.layer === bikesLayer) {
+	markerClusters.addLayer(bikes);
+  }
 });
 
 map.on("overlayremove", function(e) {
   if (e.layer === stopLayer) {
     markerClusters.removeLayer(stops);
     syncSidebar();
+  }
+  if (e.layer === bikesLayer) {
+	markerClusters.removeLayer(bikes);
   }
 });
 
@@ -313,15 +319,13 @@ map.on("moveend", function (e) {
       markerClusters.addLayer(stops);
     });
     // for bikes
-    var bikesurl = "/kvbradpositions/service/allbikeslatestposition?bbox=" + north +"," + west + "," + south +"," + east + "&geojson";
-    $.getJSON(bikesurl, function (data) {
+    var bikesurl = "https://tom.cologne.codefor.de/kvbradpositions/service/allbikeslatestposition?bbox=" + north +"," + west + "," + south +"," + east + "&geojson";
+    $.getJSON(bikesurl, function (bikeData) {
         // clear layers
     	bikes.clearLayers();
         // add data
-        bikes.addData(data);
-        map.addLayer(bikesLayer);
+        bikes.addData(bikeData);
     });
-
 
   syncSidebar();
 });

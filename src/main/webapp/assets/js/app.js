@@ -139,12 +139,16 @@ var stops = L.geoJson(null, {
       icon: L.icon({
         iconUrl: "assets/img/" + feature.properties.typ + ".png",
         iconSize: [20, 20],
-        iconAnchor: [12, 28],
+        iconAnchor: [0, 0],
         popupAnchor: [0, -25]
       }),
       title: feature.properties.name,
       riseOnHover: true
-    });
+    }).bindTooltip(feature.properties.name, {
+    			permanent: true, 
+    			direction: 'top', 
+    			offset: [10, 0]
+    		}).openTooltip();
   },
   onEachFeature: function (feature, layer) {
     if (feature.properties) {

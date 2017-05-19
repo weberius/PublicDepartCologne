@@ -312,11 +312,14 @@ map.on("moveend", function (e) {
 	// for stops
     var stationurl = "https://tom.cologne.codefor.de/publicTransportStation/service/stops?bbox=" + north +"," + west + "," + south +"," + east + "&geojson";
     $.getJSON(stationurl, function (data) {
-      // clear layers
+    	// clear layers
       stops.clearLayers(); 
       // add data
       stops.addData(data);
-      markerClusters.addLayer(stops);
+  	  if (map.hasLayer(stopLayer)) {
+	    console.log('map has stopLayer');
+	    markerClusters.addLayer(stops);
+	  }
     });
     // for bikes
     var bikesurl = "https://tom.cologne.codefor.de/kvbradpositions/service/allbikeslatestposition?bbox=" + north +"," + west + "," + south +"," + east + "&geojson";
@@ -325,9 +328,13 @@ map.on("moveend", function (e) {
     	bikes.clearLayers();
         // add data
         bikes.addData(bikeData);
+    	if (map.hasLayer(bikesLayer)) {
+    		console.log('map has bikesLayer');
+    		markerClusters.addLayer(bikes);
+    	}
     });
 
-  syncSidebar();
+    syncSidebar();
 });
 
 /* Clear feature highlight when map is clicked */
@@ -443,9 +450,6 @@ $(document).one("ajaxStop", function () {
       if (map._layers[datum.id]) {
         map._layers[datum.id].fire("click");
       }
-    }
-    if (datum.source === "GeoNames") {
-      map.setView([datum.lat, datum.lng], 14);
     }
     if ($(".navbar-collapse").height() > 50) {
       $(".navbar-collapse").collapse("hide");

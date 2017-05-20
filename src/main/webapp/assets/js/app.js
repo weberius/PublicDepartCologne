@@ -8,7 +8,6 @@ $(window).resize(function() {
 
 $(document).on("click", ".feature-row", function(e) {
   $(document).off("mouseout", ".feature-row", clearHighlight);
-  sidebarClick(parseInt($(this).attr("id"), 10));
 });
 
 if ( !("ontouchstart" in window) ) {
@@ -73,37 +72,6 @@ function clearHighlight() {
   highlight.clearLayers();
 }
 
-function sidebarClick(id) {
-  var layer = markerClusters.getLayer(id);
-  map.setView([layer.getLatLng().lat, layer.getLatLng().lng], 17);
-  layer.fire("click");
-  /* Hide sidebar and go to the map on small screens */
-  if (document.body.clientWidth <= 767) {
-    $("#sidebar").hide();
-    map.invalidateSize();
-  }
-}
-
-function syncSidebar() {
-  /* Empty sidebar features */
-  $("#feature-list tbody").empty();
-  /* Loop through stops layer and add only features which are in the map bounds */
-  stops.eachLayer(function (layer) {
-    if (map.hasLayer(stopLayer)) {
-      if (map.getBounds().contains(layer.getLatLng())) {
-        $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="16" src="assets/img/' + layer.feature.properties.typ + '.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-      }
-    }
-  });
-  /* Update list.js featureList */
-  featureList = new List("features", {
-    valueNames: ["feature-name"]
-  });
-  featureList.sort("feature-name", {
-    order: "asc"
-  });
-}
-
 /* Basemap Layers */
 var cartoLight = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png", {
   maxZoom: 19,
@@ -164,48 +132,43 @@ var stops = L.geoJson(null, {
           departuretable.destroy();
           $('#departuretable').empty(); // empty in case the columns change
 
-          $.getJSON(routingUrl, function(publicTransportDepartureTimeCologne) {
-        	  
-        	  $("#distanceToDestination").replaceWith( "<div>" + publicTransportDepartureTimeCologne.distanceToDestination + " m oder " + publicTransportDepartureTimeCologne.timeToDestination + " Minuten zur Haltestelle</div>" );
-        	  $("#lastcall").replaceWith( "<div>letzte Abfrage: " + publicTransportDepartureTimeCologne.lastcall + " </div>" );
+          departuretable = $('#departuretable').DataTable({
+  	  		"retrieve": true,
+	  		"destroy":  true,
+	  		"paging":   false,
+	        "ordering": false,
+	        "info":     false,
+	        "ajax" : routingUrl,
+			"columns" : [ {
+				"data" : "route",
+				"bSearchable": true
+			}, {
+				"data" : "destination",
+				"bSearchable": true
+			}, {
+				"data" : "time",
+				"bSearchable": false
+			}, {
+				"data" : "leave",
+				"bSearchable": false
+			} ]
+		  });
+		  $('#departuretable tbody').on('click', 'tr', function() {
+			  	var tabledata = departuretable.row(this).data();
+			  	departuretable.search(tabledata.destination).draw();
+			  	console.log('departuretable tr touched ' + JSON.stringify(tabledata));
+		  });
+			  
+	//	  console.log(JSON.stringify(departuretable));
 
-	          departuretable = $('#departuretable').DataTable({
-	        	"data": publicTransportDepartureTimeCologne.data,
-	  	  		"retrieve": true,
-		  		"destroy":  true,
-		  		"paging":   false,
-		        "ordering": false,
-		        "info":     false,
-				"columns" : [ {
-					"data" : "route",
-					"bSearchable": true
-				}, {
-					"data" : "destination",
-					"bSearchable": true
-				}, {
-					"data" : "time",
-					"bSearchable": false
-				}, {
-					"data" : "leave",
-					"bSearchable": false
-				} ]
-			  });
-			  $('#departuretable tbody').on('click', 'tr', function() {
-				  	var tabledata = departuretable.row(this).data();
-				  	departuretable.search(tabledata.destination).draw();
-				  	console.log('departuretable tr touched ' + JSON.stringify(tabledata));
-			  });
-          });
-
-
-//          setInterval( function () {
-//		  	departuretable.ajax.reload();
-//		  }, 60000 );
+          setInterval( function () {
+		  	departuretable.ajax.reload();
+		  }, 60000 );
 		  	
 
         }
       });
-      $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/' + layer.feature.properties.typ + '.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+
       stopSearch.push({
         name: layer.feature.properties.name,
         address: layer.feature.properties.ADRESS1,
@@ -272,7 +235,11 @@ map = L.map("map", {
   attributionControl: false
 });
 
-map.locate({setView: true, maxZoom: 15});
+map.locate({
+		setView: true, 
+		maxZoom: 15,
+		enableHighAccuracy: true
+		});
 
 function onLocationFound(e) {
 	locationLat = e.latlng.lat;
@@ -295,7 +262,6 @@ map.on('locationfound', onLocationFound);
 map.on("overlayadd", function(e) {
   if (e.layer === stopLayer) {
     markerClusters.addLayer(stops);
-    syncSidebar();
   }
   if (e.layer === bikesLayer) {
 	markerClusters.addLayer(bikes);
@@ -305,7 +271,6 @@ map.on("overlayadd", function(e) {
 map.on("overlayremove", function(e) {
   if (e.layer === stopLayer) {
     markerClusters.removeLayer(stops);
-    syncSidebar();
   }
   if (e.layer === bikesLayer) {
 	markerClusters.removeLayer(bikes);
@@ -348,7 +313,6 @@ map.on("moveend", function (e) {
     	}
     });
 
-    syncSidebar();
 });
 
 /* Clear feature highlight when map is clicked */

@@ -145,7 +145,7 @@ var stops = L.geoJson(null, {
       title: feature.properties.name,
       riseOnHover: true
     }).bindTooltip(feature.properties.name, {
-    			permanent: map.getZoom() > 15, 
+    			permanent: map.getZoom() > 14, 
     			direction: 'top', 
     			offset: [10, 0]
     		}).openTooltip();

@@ -155,7 +155,7 @@ var stops = L.geoJson(null, {
       layer.on({
         click: function (e) {
           $("#feature-title").html(feature.properties.name);
-          $("#featureModal").modal("show");
+          $("#featureModal").modal("show").focus();
 //          highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
           var departuretable = $('#departuretable').DataTable();

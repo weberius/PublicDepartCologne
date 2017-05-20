@@ -159,42 +159,50 @@ var stops = L.geoJson(null, {
 //          highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
           var departuretable = $('#departuretable').DataTable();
-          var routingUrl = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/stop/" + feature.id + "/?fromTo=" + locationLat + "," + locationLng + ","+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0]+"&datatables";
+          var routingUrl = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/stop/" + feature.id + "/?fromTo=" + locationLat + "," + locationLng + ","+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0];
 
           departuretable.destroy();
           $('#departuretable').empty(); // empty in case the columns change
-   
-          departuretable = $('#departuretable').DataTable({
-  	  		"retrieve": true,
-	  		"destroy":  true,
-	  		"paging":   false,
-	        "ordering": false,
-	        "info":     false,
-			"ajax" : routingUrl,
-			"columns" : [ {
-				"data" : "route",
-				"bSearchable": true
-			}, {
-				"data" : "destination",
-				"bSearchable": true
-			}, {
-				"data" : "time",
-				"bSearchable": false
-			}, {
-				"data" : "leave",
-				"bSearchable": false
-			} ]
-		  });
 
-          setInterval( function () {
-		  	departuretable.ajax.reload();
-		  }, 60000 );
+          $.getJSON(routingUrl, function(publicTransportDepartureTimeCologne) {
+        	  
+        	  $("#distanceToDestination").replaceWith( "<div>" + publicTransportDepartureTimeCologne.distanceToDestination + " m oder " + publicTransportDepartureTimeCologne.timeToDestination + " Minuten zur Haltestelle</div>" );
+        	  $("#lastcall").replaceWith( "<div>letzte Abfrage: " + publicTransportDepartureTimeCologne.lastcall + " </div>" );
+
+	          departuretable = $('#departuretable').DataTable({
+	        	"data": publicTransportDepartureTimeCologne.data,
+	  	  		"retrieve": true,
+		  		"destroy":  true,
+		  		"paging":   false,
+		        "ordering": false,
+		        "info":     false,
+				"columns" : [ {
+					"data" : "route",
+					"bSearchable": true
+				}, {
+					"data" : "destination",
+					"bSearchable": true
+				}, {
+					"data" : "time",
+					"bSearchable": false
+				}, {
+					"data" : "leave",
+					"bSearchable": false
+				} ]
+			  });
+			  $('#departuretable tbody').on('click', 'tr', function() {
+				  	var tabledata = departuretable.row(this).data();
+				  	departuretable.search(tabledata.destination).draw();
+				  	console.log('departuretable tr touched ' + JSON.stringify(tabledata));
+			  });
+          });
+
+
+//          setInterval( function () {
+//		  	departuretable.ajax.reload();
+//		  }, 60000 );
 		  	
-		  $('#departuretable tbody').on('click', 'tr', function() {
-		  	var tabledata = departuretable.row(this).data();
-		  	departuretable.search(tabledata.destination).draw();
-//		  	console.log('departuretable tr touched ' + JSON.stringify(tabledata));
-		  });
+
         }
       });
       $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/' + layer.feature.properties.typ + '.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');

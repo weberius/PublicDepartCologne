@@ -152,47 +152,43 @@ var stops = L.geoJson(null, {
   },
   onEachFeature: function (feature, layer) {
     if (feature.properties) {
-      var content = "<div id='information'>Daten werden geladen ...</div>" ;
+//      var content = "<div id='information'>Daten werden geladen ...</div>" ;
       layer.on({
         click: function (e) {
           $("#feature-title").html(feature.properties.name);
-          $("#feature-info").html(content);
+//          $("#feature-info").html(content);
           $("#featureModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
-          var routingUrl = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/stop/" + feature.id + "/?fromTo=" + locationLat + "," + locationLng + ","+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0];
-          $.getJSON(routingUrl, function(data) {
-        	  console.log(data);
-
-	          var html = "";
-	          html += '<h3>';
-	          html += data.distanceToDestination + " m oder ca. " + data.timeToDestination + " Min. zu Fu&szlig; zur Haltestelle.";
-	          html += '</h3>';
-
-	          var arr = $.map(data.timetableList, function(el) { return el });
-	          if (data.timetableList.length == 0) {
-	        	  html += '<div id="information">Es liegen keine Abfahrtsinformationen vor.</div>'
-	          } else {
-		          html += '<table class="table table-striped table-bordered table-condensed"><thead></thead><tbody>';
-		          html += '<tr>';
-		          html += '<th>Linie</th>';
-		          html += '<th>Richtung</th>';
-		          html += '<th>Abfahrt in</th>';
-		          html += '<th>ist erreichbar in</th>';
-		          html += '</tr>';
-		          for (var i = 0, len = arr.length; i < len; ++i) {
-		              html += '<tr>';
-		              html += '<th>' + arr[i].route + '</th>';
-		              html += '<td>' + arr[i].destination + '</td>';
-	                  html += '<td>' + arr[i].time + ' Min.</td>';
-	                  html += '<td>' + arr[i].leave + ' Min.</td>';
-		              html += "</tr>";
-		          }
-		          html += '</tbody><tfoot></tfoot></table>';
-	          }
-	          
-	          $("#information").html(html);
-          });
+          var routingUrl = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/stop/" + feature.id + "/?fromTo=" + locationLat + "," + locationLng + ","+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0]+"&datatables";
+	  	  var departuretable = $('#departuretable').DataTable({
+	  		"paging":   false,
+	        "ordering": false,
+	        "info":     false,
+			"ajax" : routingUrl,
+			"columns" : [ {
+				"data" : "route",
+				"bSearchable": true
+			}, {
+				"data" : "destination",
+				"bSearchable": true
+			}, {
+				"data" : "time",
+				"bSearchable": false
+			}, {
+				"data" : "leave",
+				"bSearchable": false
+			} ]
+		  });
+		  	setInterval( function () {
+		  		departuretable.ajax.reload();
+		  	}, 60000 );
+		  	
+		  	$('#departuretable tbody').on('click', 'tr', function() {
+		  		var tabledata = departuretable.row(this).data();
+		  		departuretable.search(tabledata.destination).draw();
+//		  		console.log('departuretable tr touched ' + JSON.stringify(tabledata));
+		  	});
         }
       });
       $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/' + layer.feature.properties.typ + '.png"></td><td class="feature-name">' + layer.feature.properties.name + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');

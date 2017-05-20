@@ -26,6 +26,8 @@
 	href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css">
 <link rel="stylesheet"
 	href="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css">
+<link rel="stylesheet"
+	href="assets/dataTables/1.10.9/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="assets/css/app.css">
 
 <link rel="apple-touch-icon" sizes="76x76"
@@ -279,7 +281,26 @@
 						aria-hidden="true">&times;</button>
 					<h4 class="modal-title text-primary" id="feature-title"></h4>
 				</div>
-				<div class="modal-body" id="feature-info"></div>
+				<div class="modal-body" id="feature-info">
+					<table id="departuretable" class="display" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>Linie</th>
+								<th>Richtung</th>
+								<th>Abfahrt in</th>
+								<th>erreichbar in</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>Linie</th>
+								<th>Richtung</th>
+								<th>Abfahrt in</th>
+								<th>erreichbar in</th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
@@ -328,5 +349,7 @@
 		src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script>
 	<script
 		src="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js"></script>
+	<script
+		src="assets/dataTables/1.10.9/js/jquery.dataTables.min.js"></script>
 	<script src="assets/js/app.js"></script></body>
 </html>

@@ -165,23 +165,13 @@ var stops = L.geoJson(null, {
 					"bSearchable": false
 				} ]
 			  });
+			  $('#departuretable tbody').on('click', 'tr', function() {
+				  	var tabledata = departuretable.row(this).data();
+				  	departuretable.search(tabledata.destination).draw();
+				  	console.log('departuretable tr touched ' + JSON.stringify(tabledata));
+			  });
           });
-          
-		  $('#departuretable tbody').on('click', 'tr', function() {
-			  	var tabledata = departuretable.row(this).data();
-			  	departuretable.search(tabledata.destination).draw();
-			  	console.log('departuretable tr touched ' + JSON.stringify(tabledata));
-		  });
         }
-      });
-
-      stopSearch.push({
-        name: layer.feature.properties.name,
-        address: layer.feature.properties.ADRESS1,
-        source: "Stops",
-        id: L.stamp(layer),
-        lat: layer.feature.geometry.coordinates[1],
-        lng: layer.feature.geometry.coordinates[0]
       });
     }
   }
@@ -375,18 +365,6 @@ var layerControl = L.control.groupedLayers(baseLayers, groupedOverlays, {
   collapsed: isCollapsed
 }).addTo(map);
 
-/* Highlight search box text on click */
-$("#searchbox").click(function () {
-  $(this).select();
-});
-
-/* Prevent hitting enter from refreshing the page */
-$("#searchbox").keypress(function (e) {
-  if (e.which == 13) {
-    e.preventDefault();
-  }
-});
-
 $("#featureModal").on("hidden.bs.modal", function (e) {
   $(document).on("mouseout", ".feature-row", clearHighlight);
 });
@@ -394,59 +372,6 @@ $("#featureModal").on("hidden.bs.modal", function (e) {
 /* Typeahead search functionality */
 $(document).one("ajaxStop", function () {
   $("#loading").hide();
-  sizeLayerControl();
-  /* Fit map to boroughs bounds */
-  map.fitBounds(stops.getBounds());
-  featureList = new List("features", {valueNames: ["feature-name"]});
-  featureList.sort("feature-name", {order:"asc"});
-
-  var stopsBH = new Bloodhound({
-    name: "Stops",
-    datumTokenizer: function (d) {
-      return Bloodhound.tokenizers.whitespace(d.name);
-    },
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    local: stopSearch,
-    limit: 10
-  });
-
-  stopsBH.initialize();
-
-  /* instantiate the typeahead UI */
-  $("#searchbox").typeahead({
-    minLength: 3,
-    highlight: true,
-    hint: false
-  }, {
-    name: "Stops",
-    displayKey: "name",
-    source: stopsBH.ttAdapter(),
-    templates: {
-      header: "<h4 class='typeahead-header'><img src='assets/img/Stadtbahn.png' width='32' height='32'>&nbsp;Haltestellen</h4>",
-      suggestion: Handlebars.compile(["{{name}}<br>&nbsp;<small>{{address}}</small>"].join(""))
-    }
-  }).on("typeahead:selected", function (obj, datum) {
-    if (datum.source === "Stops") {
-      if (!map.hasLayer(stopLayer)) {
-        map.addLayer(stopLayer);
-      }
-      map.setView([datum.lat, datum.lng], 17);
-      if (map._layers[datum.id]) {
-        map._layers[datum.id].fire("click");
-      }
-    }
-    if ($(".navbar-collapse").height() > 50) {
-      $(".navbar-collapse").collapse("hide");
-    }
-  }).on("typeahead:opened", function () {
-    $(".navbar-collapse.in").css("max-height", $(document).height() - $(".navbar-header").height());
-    $(".navbar-collapse.in").css("height", $(document).height() - $(".navbar-header").height());
-  }).on("typeahead:closed", function () {
-    $(".navbar-collapse.in").css("max-height", "");
-    $(".navbar-collapse.in").css("height", "");
-  });
-  $(".twitter-typeahead").css("position", "static");
-  $(".twitter-typeahead").css("display", "block");
 });
 
 // Leaflet patch to make layer control scrollable on touch browsers

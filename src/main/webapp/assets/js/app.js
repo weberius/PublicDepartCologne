@@ -124,48 +124,54 @@ var stops = L.geoJson(null, {
         click: function (e) {
           $("#feature-title").html(feature.properties.name);
           $("#featureModal").modal("show").focus();
-//          highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
-          var departuretable = $('#departuretable').DataTable();
           var routingUrl = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/stop/" + feature.id + "/?fromTo=" + locationLat + "," + locationLng + ","+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0];
 
-          departuretable.destroy();
-          $('#departuretable').empty(); // empty in case the columns change
+          $.getJSON(routingUrl, function(publicTransportDepartureTimeCologne) {
 
-          departuretable = $('#departuretable').DataTable({
-  	  		"retrieve": true,
-	  		"destroy":  true,
-	  		"paging":   false,
-	        "ordering": false,
-	        "info":     false,
-	        "ajax" : routingUrl,
-			"columns" : [ {
-				"data" : "route",
-				"bSearchable": true
-			}, {
-				"data" : "destination",
-				"bSearchable": true
-			}, {
-				"data" : "time",
-				"bSearchable": false
-			}, {
-				"data" : "leave",
-				"bSearchable": false
-			} ]
-		  });
+        	  var distanceToDestination =  '<div id="distanceToDestination">' 
+        		  + publicTransportDepartureTimeCologne.distanceToDestination + ' m oder ' 
+        		  + publicTransportDepartureTimeCologne.timeToDestination + ' min '
+        		  + 'zu Fuss zur Haltestelle ('
+        		  + publicTransportDepartureTimeCologne.lastcall
+        		  + ')'
+        		  + '</div>';
+
+        	  $("#distanceToDestination").replaceWith(distanceToDestination);
+        	  $("#distanceToDestination").insertAfter($("#feature-title"));
+
+              var departuretable = $('#departuretable').DataTable();
+              departuretable.destroy();
+              $('#departuretable').empty(); // empty in case the columns change
+
+	          departuretable = $('#departuretable').DataTable({
+	        	  "data": publicTransportDepartureTimeCologne.data,
+	        	  "retrieve": true,
+	        	  "destroy":  true,
+	        	  "paging":   false,
+	        	  "ordering": false,
+	        	  "info":     false,
+				"columns" : [ {
+					"data" : "route",
+					"bSearchable": true
+				}, {
+					"data" : "destination",
+					"bSearchable": true
+				}, {
+					"data" : "time",
+					"bSearchable": false
+				}, {
+					"data" : "leave",
+					"bSearchable": false
+				} ]
+			  });
+          });
+          
 		  $('#departuretable tbody').on('click', 'tr', function() {
 			  	var tabledata = departuretable.row(this).data();
 			  	departuretable.search(tabledata.destination).draw();
 			  	console.log('departuretable tr touched ' + JSON.stringify(tabledata));
 		  });
-			  
-	//	  console.log(JSON.stringify(departuretable));
-
-          setInterval( function () {
-		  	departuretable.ajax.reload();
-		  }, 60000 );
-		  	
-
         }
       });
 

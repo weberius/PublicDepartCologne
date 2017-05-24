@@ -122,8 +122,8 @@ var stops = L.geoJson(null, {
     if (feature.properties) {
       layer.on({
         click: function (e) {
-          $("#feature-title").html(feature.properties.name);
-          $("#featureModal").modal("show").focus();
+          $("#stopsTitle").html(feature.properties.name);
+          $("#stopsModal").modal("show");
 
           var routingUrl = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/stop/" + feature.id + "/?fromTo=" + locationLat + "," + locationLng + ","+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0];
 
@@ -196,9 +196,9 @@ var bikes = L.geoJson(null, {
       var content = "<div id='information'>Daten werden geladen ...</div>" ;
       layer.on({
         click: function (e) {
-          $("#feature-title").html(feature.properties.name);
-          $("#feature-info").html(content);
-          $("#featureModal").modal("show");
+          $("#bikesTitle").html(feature.properties.name);
+          $("#bikesInfo").html(content);
+          $("#bikesModal").modal("show");
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
 
           var routingUrl = "https://tom.cologne.codefor.de/publicTransportDepartureTimeCologne/service/bike/" + feature.properties.number + "?fromTo=" + locationLat + "," + locationLng + ","+feature.geometry.coordinates[1]+","+feature.geometry.coordinates[0];

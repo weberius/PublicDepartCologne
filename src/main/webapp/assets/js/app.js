@@ -151,6 +151,7 @@ var stops = L.geoJson(null, {
 	        	  "paging":   false,
 	        	  "ordering": false,
 	        	  "info":     false,
+	        	  "scrollY": "200px",
 				"columns" : [ {
 					"data" : "route",
 					"bSearchable": true

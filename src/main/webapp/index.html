@@ -81,11 +81,12 @@
 				<div class="modal-header">
 					<button class="close" type="button" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Welcome to the PublicDepartCologne template!</h4>
+					<h4 class="modal-title">Welcome to the PublicDepartCologne</h4>
 				</div>
 				<div class="modal-body">
 					<ul class="nav nav-tabs nav-justified" id="aboutTabs">
 		              <li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-question-circle"></i>&nbsp;&Uuml;ber dieses Projekt</a></li>
+		              <li><a href="#usage" data-toggle="tab"><i class="fa fa-exclamation"></i>&nbsp;Benutzung</a></li>
 		              <li><a href="#disclaimer" data-toggle="tab"><i class="fa fa-exclamation-circle"></i>&nbsp;Disclaimer</a></li>
 					</ul>
 					<div class="tab-content" id="aboutTabsContent">
@@ -120,6 +121,15 @@
 							<a href="https://github.com/codeforcologne/PublicDepartCologne" target="_blank">github.com/codeforcologne/PublicDepartCologne</a>.
 						</p>
 					  </div>
+					  <div class="tab-pane fade" id="usage">
+					  	<h4>Benutzung</h4>
+					  	<p>Grundlage für die Benutzung ist die Freigabe der Ortungsdienste für den verwendeten Web-Browser. Diese werden nur temporär für die Zwecke der Anwendung verwendet und nicht aufgezeichnet. Eine personenbezogene Speicherung von Daten findet nicht statt.</p>
+					  	<p>Sobald der Ort bestimmt wurde, werden die nächsten Haltestellen ermittelt und auf diese mit dem aktuellen Aufenthaltsort in der Mitte eingezoomt. Die Haltestellen sind mit einem Haltestellen Symbol gekennzeichnet.</p>
+					  	<p>Mit Tippen auf eine Station werden die aktuellen Abfahrtszeiten abgefragt, sowie ein Fussgänger - Routing vom aktuellem Aufenthaltsort zu der jeweiligen Haltestelle durchgeführt. Mit dieser Information wird die Zeit errechnet, die vermutlich zu Fuss bis zur Haltestelle benötigt wird. Dabei wird der Strassenverlauf berücksichtigt. Zusätzliche Zeiten etwa weil es sich um eine U-Bahn oder Hochbahn - Haltestelle handelt, werden nicht berücksichtigt.</p>
+						<p>Die Zeit der Abfahrt wird gegen die Zeit des Weges bis zur Haltestelle aufgerechnet. Das Ergebnis ist ein Hinweis darauf ob z.B. der Bus erreichbar ist. Natürlich können nach eigenem Ermessen z.B. durch Beschleunigung der Schritte auch Verkehrsmittel erreicht werden, die als nicht erreichbar gekennzeichnet sind. Entsprechend ist es möglich, dass Bussen/ Bahnen, obwohl rechnerisch in direkter Nähe zum Aufenthaltsort, aus baulichen Gründen trotz entsprechender Anzeige nicht erreicht werden können.</p>
+						<p>Als alternative Fortbewegungsmittel können die Standorte der KVB-Fahrräder eingeblendet werden. Mit Tippen auf das Fahrradsymbol wird wie bei den Haltestellen die Entfernung und die zu erwartende Zeit bis zum Fahrrad eingeblendet. Es ist nicht möglich darüber ein Fahrrad zu buchen. Auch kann es sein, dass ein Fahrrad bei Ankunft bereits verliehen ist.</p>
+					  </div>						
+					  
 			           	<div id="disclaimer" class="tab-pane fade text-danger">
 							<p>
 								<strong>1. Haftungsbeschränkung</strong><br /> Die Inhalte des

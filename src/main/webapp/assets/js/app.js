@@ -1,6 +1,6 @@
 var map, featureList, stopSearch = [];
 var locationLat, locationLng;
-
+var locationfound = false;
 
 $(window).resize(function() {
   sizeLayerControl();
@@ -373,7 +373,25 @@ $("#featureModal").on("hidden.bs.modal", function (e) {
 /* Typeahead search functionality */
 $(document).one("ajaxStop", function () {
   $("#loading").hide();
+  locationfound = true;
 });
+
+function checkLocationFound() {
+	if (!locationfound) {
+		var msg = "Aktuelle Position nicht gefunden. ";
+			msg += "Bitte Ortungsdienste in den ";
+		    msg += "Browsereinstellungen prüfen. ";
+		    msg += "Haltestelleninformationen können nicht geladen werden";
+		alert(msg);
+		$("#loading").hide();
+	}
+}
+
+window.setTimeout(function(){
+	checkLocationFound();
+}, 5000);
+
+
 
 // Leaflet patch to make layer control scrollable on touch browsers
 var container = $(".leaflet-control-layers")[0];
